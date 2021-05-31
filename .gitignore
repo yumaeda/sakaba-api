@@ -1,0 +1,6 @@
+.DS_Store
+app.zip
+package
+__pycache__
+*.swp
+rds_config.example.py
