@@ -37,7 +37,8 @@ def lambda_handler(event, context):
 SELECT area,
        COUNT(area) AS count
   FROM restaurants
- WHERE JSON_EXTRACT(business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()))) IS NOT NULL
+ WHERE is_closed = 0
+   AND JSON_EXTRACT(business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()))) IS NOT NULL
  GROUP BY area
  ORDER BY COUNT(area) DESC
 """
