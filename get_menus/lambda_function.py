@@ -32,6 +32,8 @@ SELECT to_base64(UuidFromBin(restaurant_id)) AS restaurant_id,
        name,
        name_jpn,
        category,
+       sub_category,
+       region,
        price
   FROM menus
  ORDER BY category ASC, price ASC 
