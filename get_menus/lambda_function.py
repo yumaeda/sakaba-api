@@ -28,7 +28,8 @@ except pymysql.MySQLError as e:
 logger.info('SUCCESS: Connection to RDS MariaDB instance succeeded')
 
 SQL_STMT = """
-SELECT to_base64(UuidFromBin(restaurant_id)) AS restaurant_id,
+SELECT to_base64(UuidFromBin(id)) AS id,
+       to_base64(UuidFromBin(restaurant_id)) AS restaurant_id,
        name,
        name_jpn,
        category,
