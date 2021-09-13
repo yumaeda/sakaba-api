@@ -61,7 +61,7 @@ def lambda_handler(event, context):
     value = event[VALUE_KEY]
     with conn.cursor() as cursor:
         try:
-            update_sql = 'UPDATE menus SET {column} = {value} WHERE id = UuidToBin({id})'.format(
+            update_sql = 'UPDATE menus SET {column} = \'{value}\' WHERE id = UuidToBin(\'{id}\')'.format(
                 column=column,
                 value=value,
                 id=id
