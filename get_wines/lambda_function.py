@@ -18,7 +18,8 @@ try:
         db=os.environ['DB_NAME'],
         connect_timeout=10,
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
+        cursorclass=pymysql.cursors.DictCursor,
+        autocommit=True
     )
 except pymysql.MySQLError as e:
     logger.error('ERROR: Could not connect to MariaDB instance.')
