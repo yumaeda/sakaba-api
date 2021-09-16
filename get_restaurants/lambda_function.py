@@ -53,7 +53,8 @@ SELECT to_base64(UuidFromBin(r.id)) AS id,
   LEFT JOIN photos AS p
     ON r.id = p.restaurant_id
  WHERE is_closed = 0
-   AND JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()))) IS NOT NULL
+   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
  GROUP BY r.id
  ORDER BY photo_count DESC
 """
