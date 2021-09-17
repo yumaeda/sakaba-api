@@ -2,6 +2,8 @@
 
 ./clean.sh
 
+cp ../common.py ./common.py
+
 pip3 install --target ./package pymysql
 cd package
 zip -r9 ${OLDPWD}/get_restaurants.zip .
