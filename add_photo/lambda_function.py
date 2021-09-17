@@ -2,35 +2,11 @@
 import base64
 import boto3
 from botocore.config import Config
-import logging
 import os
-import sys
 import uuid
-
-# 3rd Party Module
-import pymysql
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+from common import conn, logging, get_response, STATUS_CODE_OK, STATUS_CODE_BAD_REQUEST
 
 BUCKET_NAME = os.environ['S3_BUCKET_NAME']
-
-try:
-    conn = pymysql.connect(
-        host=os.environ['DB_HOST'],
-        user=os.environ['DB_USER'],
-        passwd=os.environ['DB_PASSWORD'],
-        db=os.environ['DB_NAME'],
-        connect_timeout=10,
-        charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
-    )
-except pymysql.MySQLError as e:
-    logger.error('ERROR: Could not connect to MariaDB instance.')
-    logger.error(e)
-    sys.exit()
-
-logger.info('SUCCESS: Connection to RDS MariaDB instance succeeded')
 
 def insert_photo_metadata(restaurant_id: str) -> str:
     """
@@ -73,7 +49,7 @@ def lambda_handler(event, context):
                     Key=file_path,
                     Body=file_content
                 )
-                return { 'statusCode': 200, 'body': file_path }
+                return get_response(STATUS_CODE_OK, file_path)
             except Exception as ex:
                 logging.exception(ex)
-    return { 'statusCode': 400, 'body': 'Invalid parameters' }
+    return get_response(STATUS_CODE_BAD_REQUEST, 'Invalid parameters')
