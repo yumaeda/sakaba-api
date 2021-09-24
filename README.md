@@ -1,5 +1,5 @@
 # tokyo-takeout-api
-API repository for tokyo-takeout.com
+API repository for sakaba.link
 
 ## Deployment
 ### Deploy getRestaurants Lambda
