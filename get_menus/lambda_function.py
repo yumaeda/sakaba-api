@@ -24,4 +24,4 @@ def lambda_handler(event, context):
     with conn.cursor() as cursor:
         cursor.execute(SQL_STMT)
         entities = cursor.fetchall()
-    return get_response(STATUS_CODE_OK, json.dumps(entities)a)
+    return get_response(STATUS_CODE_OK, json.dumps(entities))
