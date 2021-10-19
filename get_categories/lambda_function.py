@@ -5,11 +5,10 @@ from common import conn, get_response, STATUS_CODE_OK, STATUS_CODE_BAD_REQUEST
 SQL_STMT = """
 SELECT id,
        parent_id,
-       name,
-       value
+       name
   FROM categories
  WHERE restaurant_id = UuidToBin('{restaurant_id}')
- ORDER BY parent_id ASC, value ASC
+ ORDER BY parent_id ASC, id ASC
 """
  
 def lambda_handler(event, context):
