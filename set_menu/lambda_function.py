@@ -1,4 +1,5 @@
 from common import conn, logging, get_response, STATUS_CODE_OK, STATUS_CODE_BAD_REQUEST, STATUS_CODE_INTERNAL_SERVER_ERROR
+import re
 
 ID_KEY = 'id'
 COLUMN_KEY = 'column'
@@ -28,7 +29,7 @@ def lambda_handler(event, context):
         try:
             update_sql = 'UPDATE menus SET {column} = \'{value}\' WHERE id = UuidToBin(\'{id}\')'.format(
                 column=column,
-                value=value,
+                value=conn.escape_string(value),
                 id=id
             )
             cursor.execute(update_sql)
