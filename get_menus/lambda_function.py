@@ -4,6 +4,7 @@ from common import conn, get_response, STATUS_CODE_OK, STATUS_CODE_BAD_REQUEST
 
 SQL_STMT = """
 SELECT to_base64(UuidFromBin(id)) AS id,
+       sort_order,
        name,
        name_jpn,
        category,
@@ -13,7 +14,7 @@ SELECT to_base64(UuidFromBin(id)) AS id,
        is_min_price
   FROM menus
  WHERE restaurant_id = UuidToBin('{restaurant_id}')
- ORDER BY category ASC, sub_category ASC, region ASC, price ASC 
+ ORDER BY category ASC, sub_category ASC, region ASC, sort_order ASC 
 """
  
 def lambda_handler(event, context):
