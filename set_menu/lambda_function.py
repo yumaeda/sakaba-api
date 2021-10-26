@@ -5,7 +5,8 @@ ID_KEY = 'id'
 COLUMN_KEY = 'column'
 VALUE_KEY = 'value'
 COLUMNS = [
-   'name',
+    'sort_order',
+    'name',
     'name_jpn',
     'category',
     'sub_category',
