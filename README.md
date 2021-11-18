@@ -36,3 +36,16 @@ aws lambda create-function \
 ```bash
 aws lambda delete-function --function-name <FUNCTION_NAME>
 ```
+
+
+# Go
+
+## Launch GIN
+```sh
+go run main.go
+```
+
+## Access
+```sh
+open http://localhost:3000
+```
