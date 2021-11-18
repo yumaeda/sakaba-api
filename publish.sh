@@ -32,7 +32,7 @@ docker push ${ECR_REPO}:${TAG}
 docker rmi ${REPO}:${TAG}
 
 # Output artifact
-echo ${ECR_REPO}:${TAG} > ./build/deploy.txt
+echo ${ECR_REPO}:${TAG} > ./deploy.txt
 
 # Set env for the following actions
 echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
