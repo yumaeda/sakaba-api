@@ -1,6 +1,7 @@
-ARG GO_VERSION=1.17.3
+FROM golang:1.17.3
 
-FROM golang:${GO_VERSION}-alpine AS builder
+ENV GIN_MODE=release
+ENV PORT=8080
 
 WORKDIR /go/src
 
@@ -8,4 +9,6 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY ./main.go  ./
 
-CMD ["sh", "-c", "go run main.go"]
+EXPOSE $PORT
+
+CMD go run main.go

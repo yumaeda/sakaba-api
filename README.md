@@ -40,6 +40,16 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 
 # Go
 
+## Build Docker image
+```sh
+docker build --no-cache -t sakaba/api .
+```
+
+## Launch Docker container
+```sh
+docker run -d -p 8080:8080 sakaba/api
+```
+
 ## Launch GIN
 ```sh
 go run main.go
@@ -47,5 +57,5 @@ go run main.go
 
 ## Access
 ```sh
-open http://localhost:3000
+open http://localhost:8080
 ```
