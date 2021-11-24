@@ -47,7 +47,7 @@ docker build --no-cache -t sakaba/api .
 
 ## Create .env file
 ```sh
-cp ./env.example .
+cp ./env.example ./.env
 ```
 
 ## Launch Docker container
