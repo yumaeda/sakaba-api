@@ -45,14 +45,14 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 docker build --no-cache -t sakaba/api .
 ```
 
+## Create .env file
+```sh
+cp ./env.example .
+```
+
 ## Launch Docker container
 ```sh
 docker run -d -p 8080:8080 sakaba/api
-```
-
-## Launch GIN
-```sh
-go run main.go
 ```
 
 ## Access
