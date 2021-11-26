@@ -45,17 +45,21 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 docker build --no-cache -t sakaba/api .
 ```
 
-## Create .env file
-```sh
-cp ./env.example ./.env
-```
-
 ## Launch Docker container
 ```sh
-docker run -d -p 8080:8080 sakaba/api
+docker run -d \
+    -e SPRING_APPLICATION_JSON="{\"db.password\":\"DB_PWD\",\"db.host\":\"DB_HOST\",\"db.name\":\"DB_NAME\",\"db.user\":\"DB_USER\"}" \
+    -p 8080:8080 \
+    sakaba/api
 ```
 
 ## Access
 ```sh
 open http://localhost:8080
+```
+
+## Misc
+### Remove unused modules
+```sh
+go mod tidy -v
 ```

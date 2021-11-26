@@ -7,8 +7,11 @@ WORKDIR /go/src
 
 COPY go.mod go.sum ./
 RUN go mod download
-COPY ./main.go  ./
+COPY main.go ./
+COPY infrastructure ./infrastructure
+
+RUN go build -o ./app ./main.go
 
 EXPOSE $PORT
 
-CMD go run main.go
+ENTRYPOINT ["./app"]

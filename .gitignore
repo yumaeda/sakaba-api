@@ -4,4 +4,4 @@ __pycache__
 *.swp
 */common.py
 */*.zip
-main
+app
