@@ -7,11 +7,9 @@ WORKDIR /go/src
 
 COPY go.mod go.sum ./
 RUN go mod download
-COPY main.go ./
-COPY infrastructure ./infrastructure
-COPY models ./models
+COPY src ./src
 
-RUN go build -o ./app ./main.go
+RUN go build -o ./app ./src/main.go
 
 EXPOSE $PORT
 

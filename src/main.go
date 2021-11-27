@@ -12,10 +12,9 @@ func index(c *gin.Context) {
 }
 
 func main() {
-	homeController := controller.HomeController{}
 	videoController := controller.VideoController{}
 	router := gin.New()
-	router.GET("/", homeController.Index)
+	router.GET("/", index)
 	router.GET("/videos/", videoController.GetAllVideos)
 	router.GET("/videos/:id", videoController.GetVideosByRestaurantId)
 	router.Run(":8080")

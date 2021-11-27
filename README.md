@@ -47,7 +47,7 @@ docker build --no-cache -t sakaba/api .
 
 ## Launch Docker container
 ```sh
-docker run -d \
+docker run --rm -d \
     -e SPRING_APPLICATION_JSON="{\"db.password\":\"DB_PWD\",\"db.host\":\"DB_HOST\",\"db.name\":\"DB_NAME\",\"db.user\":\"DB_USER\"}" \
     -p 8080:8080 \
     sakaba/api
