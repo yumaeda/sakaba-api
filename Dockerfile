@@ -11,7 +11,7 @@ COPY main.go ./
 COPY infrastructure ./infrastructure
 COPY models ./models
 
-RUN go build -o ./app ./main.go
+RUN go build -tags=nomsgpack -o ./app ./main.go
 
 EXPOSE $PORT
 
