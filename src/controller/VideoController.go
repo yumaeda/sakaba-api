@@ -11,9 +11,9 @@ import (
 type VideoController struct{}
 
 func (c *VideoController) GetAllVideos(ctx *gin.Context) {
-	newDB := infrastructure.NewDatabase()
 	allVideos := []model.Video{}
-	newDB.DB.Find(&allVideos)
+	db := infrastructure.ConnectToDB()
+	db.Raw("SELECT id, UuidFromBin(restaurant_id) AS restaurant_id, name, url FROM videos ORDER BY name").Scan(&allVideos)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
@@ -22,35 +22,14 @@ func (c *VideoController) GetAllVideos(ctx *gin.Context) {
 }
 
 func (c *VideoController) GetVideosByRestaurantId(ctx *gin.Context) {
-	n := ctx.Param("id")
-	newDB := infrastructure.NewDatabase()
-
-	rows, err := newDB.DB.Raw("SELECT UuidToBin('" + n + "')").Rows()
-	if err != nil {
-		ctx.JSON(http.StatusOK, gin.H{
-			"statusCode": 400,
-			"body":       err.Error(),
-		})
-		return
-	}
-	defer rows.Close()
-
-	var restaurantId string
-	for rows.Next() {
-		if err := rows.Scan(&restaurantId); err != nil {
-			ctx.JSON(http.StatusOK, gin.H{
-				"statusCode": 500,
-				"body":       err.Error(),
-			})
-			return
-		}
-	}
-
-	allVideos := []model.Video{}
-	newDB.DB.Where(model.Video{RestaurantId: restaurantId}).Find(&allVideos)
+	id := ctx.Param("id")
+	restaurantId := infrastructure.UuidToBin(id)
+	videos := []model.SimpleVideo{}
+	db := infrastructure.ConnectToDB()
+	db.Table("videos").Select("name", "url").Where("restaurant_id = ?", restaurantId).Scan(&videos)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       allVideos,
+		"body":       videos,
 	})
 }

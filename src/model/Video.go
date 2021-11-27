@@ -6,3 +6,8 @@ type Video struct {
 	Name         string `json:"name"`
 	Url          string `json:"url"`
 }
+
+type SimpleVideo struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
