@@ -9,7 +9,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY src ./src
 
-RUN go build -o ./app ./src/main.go
+RUN go build -tags=nomsgpack -o ./app ./src/main.go
 
 EXPOSE $PORT
 
