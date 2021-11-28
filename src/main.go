@@ -10,13 +10,6 @@ func CORS(ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Methods", "GET")
 	ctx.Header("Access-Control-Allow-Headers", "*")
 	ctx.Header("Content-Type", "application/json")
-	/*
-		if ctx.Request.Method != "OPTIONS" {
-			ctx.Next()
-		} else {
-			ctx.AbortWithStatus(http.StatusOK)
-		}
-	*/
 }
 
 func main() {
