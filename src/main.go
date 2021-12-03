@@ -14,11 +14,13 @@ func CORS(ctx *gin.Context) {
 
 func main() {
 	homeController := controller.HomeController{}
+	photoController := controller.PhotoController{}
 	videoController := controller.VideoController{}
 
 	router := gin.Default()
 	router.Use(CORS)
 	router.GET("/", homeController.Index)
+	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/videos/", videoController.GetAllVideos)
 	router.GET("/videos/:id", videoController.GetVideosByRestaurantId)
 	router.Run(":8080")
