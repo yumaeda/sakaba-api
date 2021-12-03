@@ -41,6 +41,13 @@ func ConnectToDB() *gorm.DB {
 	return db
 }
 
+func CloseDB(db *gorm.DB) {
+	targetDB, err := db.DB()
+	if err == nil {
+		targetDB.Close()
+	}
+}
+
 func UuidToBin(uuid string) string {
 	db := ConnectToDB()
 	rows, err := db.Raw("SELECT UuidToBin('" + uuid + "')").Rows()

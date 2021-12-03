@@ -23,6 +23,7 @@ func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
                   JOIN restaurants AS r
                     ON p.restaurant_id = r.id
                  ORDER BY p.create_time DESC`).Scan(&allPhotos)
+	infrastructure.CloseDB(db)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,

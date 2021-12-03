@@ -14,6 +14,7 @@ func (c *VideoController) GetAllVideos(ctx *gin.Context) {
 	allVideos := []model.Video{}
 	db := infrastructure.ConnectToDB()
 	db.Raw("SELECT id, UuidFromBin(restaurant_id) AS restaurant_id, name, url FROM videos ORDER BY name").Scan(&allVideos)
+	infrastructure.CloseDB(db)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
@@ -27,6 +28,7 @@ func (c *VideoController) GetVideosByRestaurantId(ctx *gin.Context) {
 	videos := []model.SimpleVideo{}
 	db := infrastructure.ConnectToDB()
 	db.Table("videos").Select("name", "url").Where("restaurant_id = ?", restaurantId).Scan(&videos)
+	infrastructure.CloseDB(db)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
