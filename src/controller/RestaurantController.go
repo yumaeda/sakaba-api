@@ -43,3 +43,23 @@ func (c *RestaurantController) GetOpenRestaurants(ctx *gin.Context) {
 		"body":       restaurants,
 	})
 }
+
+func (c *RestaurantController) GetOpenRestaurantCount(ctx *gin.Context) {
+	restaurantCount := []model.RestaurantCount{}
+	db := infrastructure.ConnectToDB()
+
+	db.Raw(`SELECT area,
+                       COUNT(area) AS count
+                  FROM restaurants
+                 WHERE is_closed = 0
+                   AND REPLACE(JSON_EXTRACT(business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                   AND REPLACE(JSON_EXTRACT(business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                 GROUP BY area
+                 ORDER BY COUNT(area) DESC`).Scan(&restaurantCount)
+	infrastructure.CloseDB(db)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"statusCode": 200,
+		"body":       restaurantCount,
+	})
+}
