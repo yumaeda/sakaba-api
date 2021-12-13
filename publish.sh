@@ -18,7 +18,7 @@ SHORT_HASH=$(git rev-parse --short HEAD)
 TAG=${CUR_DATE}-${SHORT_HASH}
 
 # Build Docker image
-go build *.go
+go build src/*.go
 docker build . -t ${REPO}:${TAG}
 
 # Login to ECR
