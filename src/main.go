@@ -8,13 +8,6 @@ import (
 	"sakaba.link/api/src/controller"
 )
 
-func CORS(ctx *gin.Context) {
-	ctx.Header("Access-Control-Allow-Origin", "https://sakaba.link")
-	ctx.Header("Access-Control-Allow-Methods", "GET")
-	ctx.Header("Access-Control-Allow-Headers", "*")
-	ctx.Header("Content-Type", "application/json")
-}
-
 func main() {
 	homeController := controller.HomeController{}
 	photoController := controller.PhotoController{}
