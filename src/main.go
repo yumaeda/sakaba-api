@@ -1,6 +1,9 @@
 package main
 
 import (
+	"time"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"sakaba.link/api/src/controller"
 )
@@ -20,7 +23,14 @@ func main() {
 	restaurantController := controller.RestaurantController{}
 
 	router := gin.Default()
-	router.Use(CORS)
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:  []string{"https://sakaba.link", "https://admin.tokyo-takeout.com"},
+		AllowMethods:  []string{"GET"},
+		AllowHeaders:  []string{"Origin", "Content-Type"},
+		ExposeHeaders: []string{"Content-Length"},
+		MaxAge:        12 * time.Hour,
+	}))
+
 	router.GET("/", homeController.Index)
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
