@@ -1,4 +1,4 @@
-# tokyo-takeout-api
+# sakaba-api
 API repository for sakaba.link
 
 ## Deployment
