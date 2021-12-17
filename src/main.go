@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	cagegoyController := controller.CategoryController{}
 	homeController := controller.HomeController{}
 	photoController := controller.PhotoController{}
 	videoController := controller.VideoController{}
@@ -25,6 +26,7 @@ func main() {
 	}))
 
 	router.GET("/", homeController.Index)
+	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantId)
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
 	router.GET("/restaurant-counts/", restaurantController.GetOpenRestaurantCount)
