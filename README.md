@@ -19,6 +19,11 @@ docker run --rm -d \
 open http://localhost:8080
 ```
 
+## TODO
+- Reduce Docker image size.
+  - https://chemidy.medium.com/create-the-smallest-and-secured-golang-docker-image-based-on-scratch-4752223b7324
+  - https://developpaper.com/implementation-of-constructing-minimal-docker-image-of-golang-application/
+
 ## Misc
 ### Remove unused modules
 ```sh
