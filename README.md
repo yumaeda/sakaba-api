@@ -6,6 +6,8 @@ API repository for sakaba.link
 docker build --no-cache -t sakaba/api .
 ```
 
+&nbsp;
+
 ## Launch Docker container
 ```sh
 docker run --rm -d \
@@ -14,15 +16,19 @@ docker run --rm -d \
     sakaba/api
 ```
 
+&nbsp;
+
 ## Access
 ```sh
 open http://localhost:8080
 ```
 
-## TODO
-- Reduce Docker image size.
-  - https://chemidy.medium.com/create-the-smallest-and-secured-golang-docker-image-based-on-scratch-4752223b7324
-  - https://developpaper.com/implementation-of-constructing-minimal-docker-image-of-golang-application/
+&nbsp;
+
+## Reference
+- [Implementation of constructing minimal docker image of golang application](https://developpaper.com/implementation-of-constructing-minimal-docker-image-of-golang-application/)
+
+&nbsp;
 
 ## Misc
 ### Remove unused modules
