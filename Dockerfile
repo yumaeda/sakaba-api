@@ -9,10 +9,10 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY src ./src
 
-RUN go build -ldflags "-s -w" -tags=nomsgpack -o server ./src/main.go
+RUN CGO_ENABLED=0 go build -ldflags "-s -w" -tags=nomsgpack -o server ./src/main.go
 
 EXPOSE $PORT
 
-FROM golang:alpine as runner
+FROM scratch as runner
 COPY --from=builder /go/src/server /opt/app/
 ENTRYPOINT ["/opt/app/server"]
