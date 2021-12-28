@@ -1,7 +1,7 @@
 from common import conn, logging, get_response, STATUS_CODE_BAD_REQUEST, STATUS_CODE_INTERNAL_SERVER_ERROR, STATUS_CODE_OK
 
 SQL_STMT = """
-INSERT INTO restaurants(id, url, name, genre, tel, address, area, business_day_info, latitude, longitude)
+INSERT INTO restaurants(id, url, name, genre, tel, address, area, takeout_available, business_day_info, latitude, longitude)
      VALUES (
         UuidToBin(UUID()),
         '{url}',
@@ -10,6 +10,7 @@ INSERT INTO restaurants(id, url, name, genre, tel, address, area, business_day_i
         '{tel}',
         '{address}',
         '{area}',
+        0,
         '{business_day_info}',
         '{latitude}',
         '{longitude}'
