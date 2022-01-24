@@ -29,6 +29,7 @@ func main() {
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantId)
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
+	router.GET("/restaurants/genres/:id", restaurantController.GetOpenRestaurantsByGenreId)
 	router.GET("/restaurant-counts/", restaurantController.GetOpenRestaurantCount)
 	router.GET("/rankings/", rankingController.GetAllRankings)
 	router.GET("/videos/", videoController.GetAllVideos)
