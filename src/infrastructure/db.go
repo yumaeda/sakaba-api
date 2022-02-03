@@ -16,14 +16,10 @@ type DatabaseConfig struct {
 	User     string `json:"db.user"`
 }
 
-/*
- * TODO: Retrieve DB credentials from AWS Secret Manager.
- * https://dev.to/aws-builders/aws-secret-manager-with-a-simple-golang-ecs-task-2d98
- */
 func ConnectToDB() *gorm.DB {
-	springAppJson := os.Getenv("SPRING_APPLICATION_JSON")
+	secretManagerJson := os.Getenv("SPRING_APPLICATION_JSON")
 	dbConfig := DatabaseConfig{}
-	json.Unmarshal([]byte(springAppJson), &dbConfig)
+	json.Unmarshal([]byte(secretManagerJson), &dbConfig)
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
