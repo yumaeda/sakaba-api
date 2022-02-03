@@ -29,6 +29,7 @@ func main() {
 	router.GET("/", homeController.Index)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantId)
 	router.GET("/genres/", genreController.GetAllGenres)
+	router.GET("/genres/:id", genreController.GetGenreById)
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
 	router.GET("/restaurants/genres/:id", restaurantController.GetOpenRestaurantsByGenreId)

@@ -24,3 +24,19 @@ func (c *GenreController) GetAllGenres(ctx *gin.Context) {
 		"body":       allGenres,
 	})
 }
+
+func (c *GenreController) GetGenreById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	genre := model.Genre{}
+	db := infrastructure.ConnectToDB()
+	db.Table("genres").
+		Select("id", "name").
+		Where("id = ?", id).
+		Scan(&genre)
+	infrastructure.CloseDB(db)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"statusCode": 200,
+		"body":       genre,
+	})
+}
