@@ -62,4 +62,8 @@ aws lambda create-function \
 aws lambda delete-function --function-name <FUNCTION_NAME>
 ```
 
+&nbsp;
 
+## TODOs
+- [Speed up Amazon ECS container deployments](https://nathanpeck.com/speeding-up-amazon-ecs-container-deployments/)
+- [Apply repository pattern](https://medium.com/wesionary-team/implement-database-transactions-with-repository-pattern-golang-gin-and-gorm-application-907517fd0743)
