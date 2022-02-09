@@ -37,13 +37,9 @@ go mod tidy -v
 ```
 
 ## Deployment
-### Deploy addMenu Lambda
-```bash
-cd add_menu && ./deploy.sh
-```
 ### Deploy Lambda
 ```bash
-cd add_xxx && ./deploy.sh
+cd xxx_xxx && ./deploy.sh
 ```
 
 ## Misc
