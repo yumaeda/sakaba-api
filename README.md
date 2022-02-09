@@ -41,9 +41,9 @@ go mod tidy -v
 ```bash
 cd add_menu && ./deploy.sh
 ```
-### Deploy addPhotos Lambda
+### Deploy Lambda
 ```bash
-cd add_photos && ./deploy.sh
+cd add_xxx && ./deploy.sh
 ```
 
 ## Misc
