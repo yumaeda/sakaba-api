@@ -4,17 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/infrastructure"
-	"sakaba.link/api/src/model"
+	"sakaba.link/api/src/repository"
 )
 
 type VideoController struct{}
 
 func (c *VideoController) GetAllVideos(ctx *gin.Context) {
-	allVideos := []model.Video{}
-	db := infrastructure.ConnectToDB()
-	db.Raw("SELECT id, UuidFromBin(restaurant_id) AS restaurant_id, name, url FROM videos ORDER BY name").Scan(&allVideos)
-	infrastructure.CloseDB(db)
+	videoRepository := repository.VideoRepository{}
+	allVideos := videoRepository.GetAllVideos()
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
@@ -24,11 +21,8 @@ func (c *VideoController) GetAllVideos(ctx *gin.Context) {
 
 func (c *VideoController) GetVideosByRestaurantId(ctx *gin.Context) {
 	id := ctx.Param("id")
-	restaurantId := infrastructure.UuidToBin(id)
-	videos := []model.SimpleVideo{}
-	db := infrastructure.ConnectToDB()
-	db.Table("videos").Select("name", "url").Where("restaurant_id = ?", restaurantId).Scan(&videos)
-	infrastructure.CloseDB(db)
+	videoRepository := repository.VideoRepository{}
+	videos := videoRepository.GetVideosByRestaurantId(id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
