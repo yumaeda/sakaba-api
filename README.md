@@ -31,6 +31,11 @@ open http://localhost:8080
 &nbsp;
 
 ## Misc
+### Install Go
+```sh
+brew install go
+```
+
 ### Remove unused modules
 ```sh
 go mod tidy -v
