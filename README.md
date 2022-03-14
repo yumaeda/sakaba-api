@@ -36,6 +36,11 @@ open http://localhost:8080
 brew install go
 ```
 
+### List environment variables for Go
+```sh
+go env
+```
+
 ### Remove unused modules
 ```sh
 go mod tidy -v
