@@ -88,3 +88,7 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 - Read [Effective Go](https://go.dev/doc/effective_go)
 - Use [golangci-lint](https://oreil.ly/O15u-)
 - [Speed up Amazon ECS container deployments](https://nathanpeck.com/speeding-up-amazon-ecs-container-deployments/)
+
+## Links
+- [Delve debugger](https://oreil.ly/sosLu]
+- [gopls](https://oreil.ly/TLapT)
