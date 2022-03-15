@@ -90,5 +90,5 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 - [Speed up Amazon ECS container deployments](https://nathanpeck.com/speeding-up-amazon-ecs-container-deployments/)
 
 ## Links
-- [Delve debugger](https://oreil.ly/sosLu]
+- [Delve debugger](https://oreil.ly/sosLu)
 - [gopls](https://oreil.ly/TLapT)
