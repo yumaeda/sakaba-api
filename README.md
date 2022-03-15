@@ -36,6 +36,11 @@ open http://localhost:8080
 brew install go
 ```
 
+### Runs `golint` over the entire project
+```sh
+golint ./...
+```
+
 ### List environment variables for Go
 ```sh
 go env
