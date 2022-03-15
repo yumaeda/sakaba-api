@@ -41,6 +41,11 @@ brew install go
 go env
 ```
 
+### Install `golint
+```sh
+go install golang.org/x/lint/golint@latest
+```
+
 ### Remove unused modules
 ```sh
 go mod tidy -v
