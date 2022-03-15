@@ -41,7 +41,7 @@ brew install go
 go env
 ```
 
-### Install `golint
+### Install `golint`
 ```sh
 go install golang.org/x/lint/golint@latest
 ```
