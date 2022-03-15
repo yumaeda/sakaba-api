@@ -36,19 +36,23 @@ open http://localhost:8080
 brew install go
 ```
 
-### Runs `golint` over the entire project
+### Install `golint`
+```sh
+go install golang.org/x/lint/golint@latest
+```
+
+### Linting and Vetting
 ```sh
 golint ./...
+```
+
+```sh
+go vet ./...
 ```
 
 ### List environment variables for Go
 ```sh
 go env
-```
-
-### Install `golint`
-```sh
-go install golang.org/x/lint/golint@latest
 ```
 
 ### Remove unused modules
