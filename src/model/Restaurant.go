@@ -1,8 +1,9 @@
 package model
 
+// Restaurant is an entity for Restaurant API.
 type Restaurant struct {
-	Id               string `json:"id"`
-	Url              string `json:"url"`
+	ID               string `json:"id"`
+	URL              string `json:"url"`
 	ImageName        string `json:"image_name"`
 	Name             string `json:"name"`
 	Genre            string `json:"genre"`

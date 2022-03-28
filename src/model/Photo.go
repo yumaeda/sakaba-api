@@ -1,7 +1,8 @@
 package model
 
+// Photo is an entity for Photo API.
 type Photo struct {
-	RestaurantId  string `json:"restaurant_id"`
+	RestaurantID  string `json:"restaurant_id"`
 	Name          string `json:"name"`
 	Image         string `json:"image"`
 	ImageWebp     string `json:"image_webp"`

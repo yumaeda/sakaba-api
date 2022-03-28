@@ -7,8 +7,10 @@ import (
 	"sakaba.link/api/src/repository"
 )
 
+// DishController is a controller for Dish API.
 type DishController struct{}
 
+// GetAllDishes returns all the dishes.
 func (c *DishController) GetAllDishes(ctx *gin.Context) {
 	dishRepository := repository.DishRepository{}
 	allDishes := dishRepository.GetAllDishes()
@@ -19,9 +21,10 @@ func (c *DishController) GetAllDishes(ctx *gin.Context) {
 	})
 }
 
-func (c *DishController) GetDishById(ctx *gin.Context) {
+// GetDishByID returns the specified dish.
+func (c *DishController) GetDishByID(ctx *gin.Context) {
 	dishRepository := repository.DishRepository{}
-	dish := dishRepository.GetDishById(ctx.Param("id"))
+	dish := dishRepository.GetDishByID(ctx.Param("id"))
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,

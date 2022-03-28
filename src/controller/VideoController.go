@@ -7,8 +7,10 @@ import (
 	"sakaba.link/api/src/repository"
 )
 
+// VideoController is a controller for Video API.
 type VideoController struct{}
 
+// GetAllVideos returns all the videos.
 func (c *VideoController) GetAllVideos(ctx *gin.Context) {
 	videoRepository := repository.VideoRepository{}
 	allVideos := videoRepository.GetAllVideos()
@@ -19,10 +21,11 @@ func (c *VideoController) GetAllVideos(ctx *gin.Context) {
 	})
 }
 
-func (c *VideoController) GetVideosByRestaurantId(ctx *gin.Context) {
+// GetVideosByRestaurantID returns videos for the restaurant.
+func (c *VideoController) GetVideosByRestaurantID(ctx *gin.Context) {
 	id := ctx.Param("id")
 	videoRepository := repository.VideoRepository{}
-	videos := videoRepository.GetVideosByRestaurantId(id)
+	videos := videoRepository.GetVideosByRestaurantID(id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,

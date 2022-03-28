@@ -1,6 +1,7 @@
 package model
 
+// Genre is an entity for Genre API.
 type Genre struct {
-	Id   int    `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }

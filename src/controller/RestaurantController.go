@@ -7,8 +7,10 @@ import (
 	"sakaba.link/api/src/repository"
 )
 
+// RestaurantController is a controller for Restaurant API.
 type RestaurantController struct{}
 
+// GetOpenRestaurants returns open restaurants.
 func (c *RestaurantController) GetOpenRestaurants(ctx *gin.Context) {
 	restaurantRepository := repository.RestaurantRepository{}
 	restaurants := restaurantRepository.GetOpenRestaurants()
@@ -19,9 +21,10 @@ func (c *RestaurantController) GetOpenRestaurants(ctx *gin.Context) {
 	})
 }
 
-func (c *RestaurantController) GetOpenRestaurantsByGenreId(ctx *gin.Context) {
+// GetOpenRestaurantsByGenreID returns open restaurants for the specified genre.
+func (c *RestaurantController) GetOpenRestaurantsByGenreID(ctx *gin.Context) {
 	restaurantRepository := repository.RestaurantRepository{}
-	restaurants := restaurantRepository.GetOpenRestaurantsByGenreId(ctx.Param("id"))
+	restaurants := restaurantRepository.GetOpenRestaurantsByGenreID(ctx.Param("id"))
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
@@ -29,9 +32,10 @@ func (c *RestaurantController) GetOpenRestaurantsByGenreId(ctx *gin.Context) {
 	})
 }
 
-func (c *RestaurantController) GetOpenRestaurantsByDishId(ctx *gin.Context) {
+// GetOpenRestaurantsByDishID returns open restaurants for the specified dish.
+func (c *RestaurantController) GetOpenRestaurantsByDishID(ctx *gin.Context) {
 	restaurantRepository := repository.RestaurantRepository{}
-	restaurants := restaurantRepository.GetOpenRestaurantsByDishId(ctx.Param("id"))
+	restaurants := restaurantRepository.GetOpenRestaurantsByDishID(ctx.Param("id"))
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
@@ -39,6 +43,7 @@ func (c *RestaurantController) GetOpenRestaurantsByDishId(ctx *gin.Context) {
 	})
 }
 
+// GetOpenRestaurantCount returns number of open restaurants.
 func (c *RestaurantController) GetOpenRestaurantCount(ctx *gin.Context) {
 	restaurantRepository := repository.RestaurantRepository{}
 	restaurantCount := restaurantRepository.GetOpenRestaurantCount()

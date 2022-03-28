@@ -5,8 +5,10 @@ import (
 	"sakaba.link/api/src/model"
 )
 
+// RankingRepository is responsible for reading from and writing to DB Table `rankings`.
 type RankingRepository struct{}
 
+// GetAllRankings returns all the rankings.
 func (c *RankingRepository) GetAllRankings() []model.Ranking {
 	allRankings := []model.Ranking{}
 	db := infrastructure.ConnectToDB()

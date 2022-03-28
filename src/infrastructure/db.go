@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// DatabaseConfig is a configuration of the Database connection.
 type DatabaseConfig struct {
 	Password string `json:"db.password"`
 	Host     string `json:"db.host"`
@@ -16,10 +17,11 @@ type DatabaseConfig struct {
 	User     string `json:"db.user"`
 }
 
+// ConnectToDB connects to the Database based on the configuration and returns pointer to the connection.
 func ConnectToDB() *gorm.DB {
-	secretManagerJson := os.Getenv("SPRING_APPLICATION_JSON")
+	secretManagerJSON := os.Getenv("SPRING_APPLICATION_JSON")
 	dbConfig := DatabaseConfig{}
-	json.Unmarshal([]byte(secretManagerJson), &dbConfig)
+	json.Unmarshal([]byte(secretManagerJSON), &dbConfig)
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -37,6 +39,7 @@ func ConnectToDB() *gorm.DB {
 	return db
 }
 
+// CloseDB closes the current Database connection.
 func CloseDB(db *gorm.DB) {
 	targetDB, err := db.DB()
 	if err == nil {
@@ -44,7 +47,8 @@ func CloseDB(db *gorm.DB) {
 	}
 }
 
-func UuidToBin(uuid string) string {
+// UUIDToBin converts UUID to Binary format.
+func UUIDToBin(uuid string) string {
 	db := ConnectToDB()
 	rows, err := db.Raw("SELECT UuidToBin('" + uuid + "')").Rows()
 	if err != nil {

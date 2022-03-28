@@ -5,8 +5,10 @@ import (
 	"sakaba.link/api/src/model"
 )
 
+// GenreRepository is responsible for reading from and writing to DB Table `genres`.
 type GenreRepository struct{}
 
+// GetAllGenres returns all the genres.
 func (c *GenreRepository) GetAllGenres() []model.Genre {
 	allGenres := []model.Genre{}
 	db := infrastructure.ConnectToDB()
@@ -19,7 +21,8 @@ func (c *GenreRepository) GetAllGenres() []model.Genre {
 	return allGenres
 }
 
-func (c *GenreRepository) GetGenreById(id string) model.Genre {
+// GetGenreByID returns the specified genre.
+func (c *GenreRepository) GetGenreByID(id string) model.Genre {
 	genre := model.Genre{}
 	db := infrastructure.ConnectToDB()
 	db.Table("genres").

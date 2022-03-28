@@ -7,9 +7,11 @@ import (
 	"sakaba.link/api/src/repository"
 )
 
+// CategoryController is a controller for Category API.
 type CategoryController struct{}
 
-func (c *CategoryController) GetCategoriesByRestaurantId(ctx *gin.Context) {
+// GetCategoriesByRestaurantID returns categories for the specified restaurant.
+func (c *CategoryController) GetCategoriesByRestaurantID(ctx *gin.Context) {
 	categoyRepository := repository.CategoryRepository{}
 	categories := categoyRepository.GetCategories(ctx.Param("id"))
 

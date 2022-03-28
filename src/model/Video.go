@@ -1,13 +1,15 @@
 package model
 
+// Video is an entity for Video API.
 type Video struct {
-	Id           int    `json:"id"`
-	RestaurantId string `json:"restaurant_id"`
+	ID           int    `json:"id"`
+	RestaurantID string `json:"restaurant_id"`
 	Name         string `json:"name"`
-	Url          string `json:"url"`
+	URL          string `json:"url"`
 }
 
+// SimpleVideo is an entity for Video API.
 type SimpleVideo struct {
 	Name string `json:"name"`
-	Url  string `json:"url"`
+	URL  string `json:"url"`
 }

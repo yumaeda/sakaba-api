@@ -7,8 +7,10 @@ import (
 	"sakaba.link/api/src/repository"
 )
 
+// GenreController is a controller for Genre API.
 type GenreController struct{}
 
+// GetAllGenres returns all the genres.
 func (c *GenreController) GetAllGenres(ctx *gin.Context) {
 	genreRepository := repository.GenreRepository{}
 	allGenres := genreRepository.GetAllGenres()
@@ -19,10 +21,11 @@ func (c *GenreController) GetAllGenres(ctx *gin.Context) {
 	})
 }
 
-func (c *GenreController) GetGenreById(ctx *gin.Context) {
+// GetGenreByID returns the specified genre.
+func (c *GenreController) GetGenreByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 	genreRepository := repository.GenreRepository{}
-	genre := genreRepository.GetGenreById(id)
+	genre := genreRepository.GetGenreByID(id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
