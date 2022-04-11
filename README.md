@@ -18,9 +18,30 @@ docker run --rm -d \
 
 &nbsp;
 
+## Login
+```sh
+curl -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{"username":"admin", "password":"admin"}' \
+    http://localhost:8080/login
+```
+
+&nbsp;
+
+## Refresh token
+```sh
+curl -X GET \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization:Bearer xxxxxxxxx' \
+    http://localhost:8080/auth/refresh_token
+```
+
 ## Access
 ```sh
-open http://localhost:8080
+curl -X GET \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization:Bearer xxxxxxxxx' \
+    http://localhost:8080/auth/home
 ```
 
 &nbsp;
@@ -89,6 +110,9 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 - Use [golangci-lint](https://oreil.ly/O15u-)
 - [Speed up Amazon ECS container deployments](https://nathanpeck.com/speeding-up-amazon-ecs-container-deployments/)
 
+&nbsp;
+
 ## Links
+- [Add JWT Authentication](https://github.com/appleboy/gin-jwt)
 - [Delve debugger](https://oreil.ly/sosLu)
 - [gopls](https://oreil.ly/TLapT)
