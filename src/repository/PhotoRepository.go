@@ -5,8 +5,10 @@ import (
 	"sakaba.link/api/src/model"
 )
 
+// PhotoRepository is responsible for reading from and writing to DB Table `photos`.
 type PhotoRepository struct{}
 
+// GetAllPhotos returns all the photos.
 func (c *PhotoRepository) GetAllPhotos() []model.Photo {
 	allPhotos := []model.Photo{}
 	db := infrastructure.ConnectToDB()

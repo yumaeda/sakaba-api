@@ -5,8 +5,10 @@ import (
 	"sakaba.link/api/src/model"
 )
 
+// RestaurantRepository is responsible for reading from and writing to DB Table `restaurants`.
 type RestaurantRepository struct{}
 
+// GetOpenRestaurants returns open restaurants.
 func (c *RestaurantRepository) GetOpenRestaurants() []model.Restaurant {
 	restaurants := []model.Restaurant{}
 	db := infrastructure.ConnectToDB()
@@ -37,7 +39,8 @@ func (c *RestaurantRepository) GetOpenRestaurants() []model.Restaurant {
 	return restaurants
 }
 
-func (c *RestaurantRepository) GetOpenRestaurantsByGenreId(genreId string) []model.Restaurant {
+// GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
+func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.Restaurant {
 	restaurants := []model.Restaurant{}
 	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
@@ -59,7 +62,7 @@ func (c *RestaurantRepository) GetOpenRestaurantsByGenreId(genreId string) []mod
                   LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
                  WHERE is_closed = 0
-		   AND rg.genre_id = ` + genreId + `
+		   AND rg.genre_id = ` + genreID + `
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  GROUP BY r.id
@@ -69,7 +72,8 @@ func (c *RestaurantRepository) GetOpenRestaurantsByGenreId(genreId string) []mod
 	return restaurants
 }
 
-func (c *RestaurantRepository) GetOpenRestaurantsByDishId(dishId string) []model.Restaurant {
+// GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
+func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.Restaurant {
 	restaurants := []model.Restaurant{}
 	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
@@ -93,7 +97,7 @@ func (c *RestaurantRepository) GetOpenRestaurantsByDishId(dishId string) []model
                   JOIN restaurants AS r
                     ON r.id = p.restaurant_id
                  WHERE r.is_closed = 0
-                   AND d.id = ` + dishId + `
+                   AND d.id = ` + dishID + `
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  ORDER BY rk.rank ASC`).Scan(&restaurants)
@@ -102,6 +106,7 @@ func (c *RestaurantRepository) GetOpenRestaurantsByDishId(dishId string) []model
 	return restaurants
 }
 
+// GetOpenRestaurantCount returns the number of open restaurants.
 func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
 	restaurantCounts := []model.RestaurantCount{}
 	db := infrastructure.ConnectToDB()

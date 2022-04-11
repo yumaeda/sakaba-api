@@ -5,8 +5,10 @@ import (
 	"sakaba.link/api/src/model"
 )
 
+// DishRepository is responsible for reading from and writing to DB Table `dishes`.
 type DishRepository struct{}
 
+// GetAllDishes returns all the dishes.
 func (c *DishRepository) GetAllDishes() []model.Dish {
 	allDishes := []model.Dish{}
 	db := infrastructure.ConnectToDB()
@@ -19,7 +21,8 @@ func (c *DishRepository) GetAllDishes() []model.Dish {
 	return allDishes
 }
 
-func (c *DishRepository) GetDishById(id string) model.Dish {
+// GetDishByID returns the specified dish.
+func (c *DishRepository) GetDishByID(id string) model.Dish {
 	dish := model.Dish{}
 	db := infrastructure.ConnectToDB()
 	db.Table("dishes").

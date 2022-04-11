@@ -5,8 +5,10 @@ import (
 	"sakaba.link/api/src/model"
 )
 
+// VideoRepository is responsible for reading from and writing to DB Table `videos`.
 type VideoRepository struct{}
 
+// GetAllVideos returns all the videos.
 func (c *VideoRepository) GetAllVideos() []model.Video {
 	allVideos := []model.Video{}
 	db := infrastructure.ConnectToDB()
@@ -16,11 +18,12 @@ func (c *VideoRepository) GetAllVideos() []model.Video {
 	return allVideos
 }
 
-func (c *VideoRepository) GetVideosByRestaurantId(id string) []model.SimpleVideo {
-	restaurantId := infrastructure.UuidToBin(id)
+// GetVideosByRestaurantID returns videos for the specified restaurant.
+func (c *VideoRepository) GetVideosByRestaurantID(id string) []model.SimpleVideo {
+	restaurantID := infrastructure.UUIDToBin(id)
 	videos := []model.SimpleVideo{}
 	db := infrastructure.ConnectToDB()
-	db.Table("videos").Select("name", "url").Where("restaurant_id = ?", restaurantId).Scan(&videos)
+	db.Table("videos").Select("name", "url").Where("restaurant_id = ?", restaurantID).Scan(&videos)
 	infrastructure.CloseDB(db)
 
 	return videos

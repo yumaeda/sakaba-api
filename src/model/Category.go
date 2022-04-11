@@ -1,7 +1,8 @@
 package model
 
+// Category is an entity for Category API.
 type Category struct {
-	Id       int    `json:"id"`
-	ParentId int    `json:"parent_id"`
+	ID       int    `json:"id"`
+	ParentID int    `json:"parent_id"`
 	Name     string `json:"name"`
 }

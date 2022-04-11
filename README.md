@@ -31,6 +31,30 @@ open http://localhost:8080
 &nbsp;
 
 ## Misc
+### Install Go
+```sh
+brew install go
+```
+
+### Install `golint`
+```sh
+go install golang.org/x/lint/golint@latest
+```
+
+### Linting and Vetting
+```sh
+golint ./...
+```
+
+```sh
+go vet ./...
+```
+
+### List environment variables for Go
+```sh
+go env
+```
+
 ### Remove unused modules
 ```sh
 go mod tidy -v
@@ -61,5 +85,13 @@ aws lambda delete-function --function-name <FUNCTION_NAME>
 &nbsp;
 
 ## TODOs
+- Read [Effective Go](https://go.dev/doc/effective_go)
+- Use [golangci-lint](https://oreil.ly/O15u-)
 - [Speed up Amazon ECS container deployments](https://nathanpeck.com/speeding-up-amazon-ecs-container-deployments/)
+
+&nbsp;
+
+## Links
 - [Add JWT Authentication](https://github.com/appleboy/gin-jwt)
+- [Delve debugger](https://oreil.ly/sosLu)
+- [gopls](https://oreil.ly/TLapT)
