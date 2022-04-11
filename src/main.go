@@ -9,22 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"sakaba.link/api/src/controller"
 	"sakaba.link/api/src/middleware"
-	"sakaba.link/api/src/model"
 )
 
 var realm = "Sakaba Link Zone"
 var identityKey = "id"
 var secretKey = "testKey"
-
-func helloHandler(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
-	user, _ := c.Get(identityKey)
-	c.JSON(200, gin.H{
-		"userID":   claims[identityKey],
-		"userName": user.(*model.User).UserName,
-		"text":     "Hello World.",
-	})
-}
 
 func main() {
 	router := gin.Default()
@@ -53,23 +42,16 @@ func main() {
 		log.Printf("NoRoute claims: %#v\n", claims)
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
-	auth := router.Group("/auth")
-	auth.GET("/refresh_token", middleware.RefreshHandler)
-	auth.Use(middleware.MiddlewareFunc())
-	{
-		auth.GET("/hello", helloHandler)
-	}
 
+	homeController := controller.HomeController{}
 	cagegoyController := controller.CategoryController{}
 	dishController := controller.DishController{}
 	genreController := controller.GenreController{}
-	homeController := controller.HomeController{}
 	photoController := controller.PhotoController{}
 	videoController := controller.VideoController{}
 	rankingController := controller.RankingController{}
 	restaurantController := controller.RestaurantController{}
 
-	router.GET("/", homeController.Index)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)
 	router.GET("/dishes/", dishController.GetAllDishes)
 	router.GET("/dishes/:id", dishController.GetDishByID)
@@ -83,5 +65,13 @@ func main() {
 	router.GET("/rankings/", rankingController.GetAllRankings)
 	router.GET("/videos/", videoController.GetAllVideos)
 	router.GET("/videos/:id", videoController.GetVideosByRestaurantID)
+
+	auth := router.Group("/auth")
+	auth.GET("/refresh_token", middleware.RefreshHandler)
+	auth.Use(middleware.MiddlewareFunc())
+	{
+		auth.GET("/home", homeController.Index)
+	}
+
 	router.Run(":8080")
 }

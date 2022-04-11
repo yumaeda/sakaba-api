@@ -18,9 +18,30 @@ docker run --rm -d \
 
 &nbsp;
 
+## Login
+```sh
+curl -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{"username":"admin", "password":"admin"}' \
+    http://localhost:8080/login
+```
+
+&nbsp;
+
+## Refresh token
+```sh
+curl -X GET \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization:Bearer xxxxxxxxx' \
+    http://localhost:8080/auth/refresh_token
+```
+
 ## Access
 ```sh
-open http://localhost:8080
+curl -X GET \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization:Bearer xxxxxxxxx' \
+    http://localhost:8080/auth/home
 ```
 
 &nbsp;
