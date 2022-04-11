@@ -43,20 +43,23 @@ func main() {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
 
-	homeController := controller.HomeController{}
+	adminController := controller.AdminController{}
 	cagegoyController := controller.CategoryController{}
 	dishController := controller.DishController{}
 	genreController := controller.GenreController{}
+	healtchCheckController := controller.HealthCheckController{}
 	photoController := controller.PhotoController{}
 	videoController := controller.VideoController{}
 	rankingController := controller.RankingController{}
 	restaurantController := controller.RestaurantController{}
 
+	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)
 	router.GET("/dishes/", dishController.GetAllDishes)
 	router.GET("/dishes/:id", dishController.GetDishByID)
 	router.GET("/genres/", genreController.GetAllGenres)
 	router.GET("/genres/:id", genreController.GetGenreByID)
+	router.GET("/health/", healtchCheckController.GetStatus)
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
 	router.GET("/restaurants/dishes/:id", restaurantController.GetOpenRestaurantsByDishID)
@@ -70,7 +73,7 @@ func main() {
 	auth.GET("/refresh_token", middleware.RefreshHandler)
 	auth.Use(middleware.MiddlewareFunc())
 	{
-		auth.GET("/home", homeController.Index)
+		auth.GET("/home", adminController.Index)
 	}
 
 	router.Run(":8080")
