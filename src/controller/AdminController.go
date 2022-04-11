@@ -10,16 +10,16 @@ import (
 
 var identityKey = "id"
 
-// HomeController is a controller for Home API.
-type HomeController struct{}
+// AdminController is a controller for Admin API.
+type AdminController struct{}
 
 // Index returns welcome message in JSON format.
-func (c *HomeController) Index(ctx *gin.Context) {
+func (c *AdminController) Index(ctx *gin.Context) {
 	claims := jwt.ExtractClaims(ctx)
 	user, _ := ctx.Get(identityKey)
 	ctx.JSON(http.StatusOK, gin.H{
 		"userID":   claims[identityKey],
 		"userName": user.(*model.User).UserName,
-		"text":     "Hello World.",
+		"text":     "Hello Admin.",
 	})
 }
