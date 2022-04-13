@@ -6,6 +6,7 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"sakaba.link/api/src/model"
+	"sakaba.link/api/src/repository"
 )
 
 type AuthMiddleware struct{}
@@ -36,12 +37,15 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 			if err := c.ShouldBind(&loginVals); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
-			userID := loginVals.Username
+			email := loginVals.Email
 			password := loginVals.Password
 
-			if (userID == "admin" && password == "admin") || (userID == "test" && password == "test") {
+			// TODO: Use Argon2 password hashing.
+			adminUserRepository := repository.AdminUserRepository{}
+			adminUser := adminUserRepository.GetAdminUserByEmail(email)
+			if adminUser.Email == email && adminUser.Password == password {
 				return &model.User{
-					UserName:  userID,
+					UserName:  email,
 					LastName:  "Maeda",
 					FirstName: "Yukitaka",
 				}, nil
@@ -50,7 +54,7 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			if v, ok := data.(*model.User); ok && v.UserName == "admin" {
+			if v, ok := data.(*model.User); ok && v.UserName == "yumaeda@gmail.com" {
 				return true
 			}
 
