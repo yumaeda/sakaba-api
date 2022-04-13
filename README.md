@@ -22,7 +22,7 @@ docker run --rm -d \
 ```sh
 curl -X POST \
     -H 'Content-Type: application/json' \
-    -d '{"username":"example@sakaba.link", "password":"xxxx"}' \
+    -d '{"email":"example@sakaba.link", "password":"xxxx"}' \
     http://localhost:8080/login
 ```
 
