@@ -19,7 +19,7 @@ type DatabaseConfig struct {
 
 // ConnectToDB connects to the Database based on the configuration and returns pointer to the connection.
 func ConnectToDB() *gorm.DB {
-	secretManagerJSON := os.Getenv("SPRING_APPLICATION_JSON")
+	secretManagerJSON := os.Getenv("APP_CONFIG_JSON")
 	dbConfig := DatabaseConfig{}
 	json.Unmarshal([]byte(secretManagerJSON), &dbConfig)
 
