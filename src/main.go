@@ -52,6 +52,7 @@ func main() {
 	videoController := controller.VideoController{}
 	rankingController := controller.RankingController{}
 	restaurantController := controller.RestaurantController{}
+	restaurantGenreController := controller.RestaurantGenreController{}
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)
@@ -74,6 +75,7 @@ func main() {
 	auth.Use(middleware.MiddlewareFunc())
 	{
 		auth.GET("/home", adminController.Index)
+		auth.POST("/restaurant-genre/", restaurantGenreController.AddRestaurantGenre)
 	}
 
 	router.Run(":8080")
