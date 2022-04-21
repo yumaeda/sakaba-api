@@ -22,6 +22,7 @@ func (c *RestaurantGenreController) AddRestaurantGenre(ctx *gin.Context) {
 				"statusCode": 200,
 				"body":       "New restaurant genre is inserted.",
 			})
+			return
 		}
 	}
 
