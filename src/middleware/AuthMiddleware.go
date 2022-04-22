@@ -44,6 +44,7 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 			adminUserRepository := repository.AdminUserRepository{}
 			adminUser := adminUserRepository.GetAdminUserByEmail(email)
 			if adminUser.Email == email && adminUser.Password == password {
+				c.SetCookie("htx-ad", jwt.GetToken(c), 60*60, "/", "sakaba.link", true, true)
 				return &model.User{
 					UserName:  email,
 					LastName:  "Maeda",
