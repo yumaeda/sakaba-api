@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -44,7 +45,6 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 			adminUserRepository := repository.AdminUserRepository{}
 			adminUser := adminUserRepository.GetAdminUserByEmail(email)
 			if adminUser.Email == email && adminUser.Password == password {
-				c.SetCookie("htx-ad", jwt.GetToken(c), 60*60, "/", "sakaba.link", true, true)
 				return &model.User{
 					UserName:  email,
 					LastName:  "Maeda",
@@ -67,8 +67,13 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 				"message": message,
 			})
 		},
-		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
-		TokenHeadName: "Bearer",
-		TimeFunc:      time.Now,
+		TokenLookup:    "header: Authorization, query: token, cookie: jwt",
+		TokenHeadName:  "Bearer",
+		TimeFunc:       time.Now,
+		SendCookie:     true,
+		SecureCookie:   true,
+		CookieHTTPOnly: true,
+		CookieDomain:   "sakaba.link",
+		CookieSameSite: http.SameSiteDefaultMode,
 	})
 }
