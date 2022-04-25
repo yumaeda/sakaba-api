@@ -20,7 +20,7 @@ func main() {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:  []string{"https://sakaba.link", "https://admin.tokyo-takeout.com"},
 		AllowMethods:  []string{"GET", "POST"},
-		AllowHeaders:  []string{"Origin", "Content-Type"},
+		AllowHeaders:  []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders: []string{"Content-Length"},
 		MaxAge:        12 * time.Hour,
 	}))
