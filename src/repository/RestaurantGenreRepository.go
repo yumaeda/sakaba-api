@@ -9,7 +9,7 @@ import (
 // RestaurantGenreRepository is responsible for reading from and writing to DB Table `restaurant_genres`.
 type RestaurantGenreRepository struct{}
 
-// AddRestaurantGenre returns all the rankings.
+// AddRestaurantGenre adds a new genre for the specified restaurant.
 func (c *RestaurantGenreRepository) AddRestaurantGenre(restaurantID string, genreID string) *gorm.DB {
 	restaurantGenre := model.RestaurantGenre{
 		RestaurantID: infrastructure.UUIDToBin(restaurantID),

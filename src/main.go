@@ -76,6 +76,7 @@ func main() {
 	{
 		auth.GET("/home", adminController.Index)
 		auth.POST("/restaurant-genre/", restaurantGenreController.AddRestaurantGenre)
+		auth.POST("/restaurant/", restaurantController.AddRestaurant)
 	}
 
 	router.Run(":8080")

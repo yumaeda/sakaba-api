@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 	"sakaba.link/api/src/infrastructure"
 	"sakaba.link/api/src/model"
 )
@@ -9,8 +11,8 @@ import (
 type RestaurantRepository struct{}
 
 // GetOpenRestaurants returns open restaurants.
-func (c *RestaurantRepository) GetOpenRestaurants() []model.Restaurant {
-	restaurants := []model.Restaurant{}
+func (c *RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
+	restaurants := []model.RestaurantView{}
 	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
@@ -40,8 +42,8 @@ func (c *RestaurantRepository) GetOpenRestaurants() []model.Restaurant {
 }
 
 // GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
-func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.Restaurant {
-	restaurants := []model.Restaurant{}
+func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
+	restaurants := []model.RestaurantView{}
 	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
@@ -73,8 +75,8 @@ func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mod
 }
 
 // GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
-func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.Restaurant {
-	restaurants := []model.Restaurant{}
+func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
+	restaurants := []model.RestaurantView{}
 	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
@@ -121,4 +123,25 @@ func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount 
 	infrastructure.CloseDB(db)
 
 	return restaurantCounts
+}
+
+// AddRestaurant adds a new restaurant.
+func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) *gorm.DB {
+	id := uuid.New()
+	restaurant := model.Restaurant{
+		ID:              infrastructure.UUIDToBin(id.String()),
+		URL:             URL,
+		Name:            name,
+		Genre:           genre,
+		Tel:             tel,
+		BusinessDayInfo: businessDayInfo,
+		Address:         address,
+		Latitude:        latitude,
+		Longitude:       longitude,
+		Area:            area,
+	}
+	db := infrastructure.ConnectToDB()
+	result := db.Create(&restaurant)
+	infrastructure.CloseDB(db)
+	return result
 }
