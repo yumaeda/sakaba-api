@@ -44,13 +44,22 @@ curl -X GET \
     http://localhost:8080/auth/home
 ```
 
-## Call Admin API
+## Call add restaurant genre API
 ```sh
 curl -X POST \
     -H 'Authorization:Bearer xxxxxxxxx' \
     -H 'Content-Type: application/json; charset=utf-8' \
     -d '{ "restaurant_id": "{RESTAURANT_ID}", "genre_id": "{GENRE_ID}" }' \
     http://localhost:8080/auth/restaurant-genre/
+```
+
+## Call add restaurant API
+```sh
+curl -X POST \
+    -H 'Authorization:Bearer xxxxxxxxx' \
+    -H 'Content-Type: application/json; charset=utf-8' \
+    -d '{ "url": "{URL}", "name": "{NAME}", "genre": "{GENRE}", "tel": "{TEL}", "business_day_info": "{BUSINESS_DAY_INFO}", "address": "{ADDRESS}", "latitude": "{LATITUDE}", "longitude": "{LONGITUDE}", "area": "{AREA}" }' \
+    http://localhost:8080/auth/restaurant/
 ```
 
 &nbsp;
