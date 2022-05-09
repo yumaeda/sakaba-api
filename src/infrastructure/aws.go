@@ -16,24 +16,17 @@ type S3Config struct {
 	Region string `json:"aws.s3.region"`
 }
 
-var AccessKeyID string
-var SecretAccessKey string
-var MyRegion string
-
 func ConnectToAws() *session.Session {
 	secretManagerJSON := os.Getenv("APP_CONFIG_JSON")
 	s3Config := S3Config{}
 	json.Unmarshal([]byte(secretManagerJSON), &s3Config)
 
-	AccessKeyID = s3Config.ID
-	SecretAccessKey = s3Config.Secret
-	MyRegion = s3Config.Region
 	awsSession, err := session.NewSession(
 		&aws.Config{
-			Region: aws.String(MyRegion),
+			Region: aws.String(s3Config.Region),
 			Credentials: credentials.NewStaticCredentials(
-				AccessKeyID,
-				SecretAccessKey,
+				s3Config.ID,
+				s3Config.Secret,
 				"",
 			),
 		})
