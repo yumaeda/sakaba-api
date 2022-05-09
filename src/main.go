@@ -75,6 +75,7 @@ func main() {
 	auth.Use(middleware.MiddlewareFunc())
 	{
 		auth.GET("/home", adminController.Index)
+		auth.POST("/photo/", photoController.AddPhoto)
 		auth.POST("/restaurant-genre/", restaurantGenreController.AddRestaurantGenre)
 		auth.POST("/restaurant/", restaurantController.AddRestaurant)
 	}
