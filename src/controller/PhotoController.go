@@ -4,7 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"sakaba.link/api/src/model"
 	"sakaba.link/api/src/repository"
+	"sakaba.link/api/src/service"
 )
 
 // PhotoController is a controller for Photo API.
@@ -23,36 +26,33 @@ func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
 
 // AddPhoto uploads the specified photo to the specified restaurant.
 func (c *PhotoController) AddPhoto(ctx *gin.Context) {
-	restaurantID := ctx.Param("restaurant_id")
-	file, header, fileErr := ctx.Request.FormFile("file_content")
-	if fileErr != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"statusCode": 400,
-			"fileName":   header.Filename,
-			"error":      fileErr.Error(),
-		})
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"restaurant_id":   restaurantID,
-		"header.Filename": header.Filename,
-		"file":            file,
-	})
-	/*
-		s3Service := service.S3Service{}
+	var json model.PhotoRequest
+	if err := ctx.ShouldBindJSON(&json); err == nil {
+		header, paramErr := ctx.FormFile("file_content")
+		if paramErr != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": paramErr.Error()})
+			return
+		}
+
+		file, fileErr := header.Open()
+		if fileErr != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": fileErr.Error()})
+			return
+		}
+
 		fileName := uuid.New().String()
-		up, uploadErr := s3Service.Upload(restaurantID, fileName, file)
+		s3Service := service.S3Service{}
+		up, uploadErr := s3Service.Upload(json.RestaurantID, fileName, file)
 		if uploadErr != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"statusCode": 500,
-				"error":      "Failed to upload file",
-				"uploader":   up,
+				"error":    "Failed to upload file",
+				"uploader": up,
 			})
 			return
 		}
 
 		photoRepository := repository.PhotoRepository{}
-		result := photoRepository.AddPhoto(restaurantID, fileName)
+		result := photoRepository.AddPhoto(json.RestaurantID, fileName)
 		if result.Error != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
 				"statusCode": 500,
@@ -65,5 +65,6 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 			"statusCode": 200,
 			"body":       "New photo is uploaded",
 		})
-	*/
+
+	}
 }

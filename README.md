@@ -11,7 +11,7 @@ docker build --no-cache -t sakaba/api .
 ## Launch Docker container
 ```sh
 docker run --rm -d \
-    -e APP_CONFIG_JSON="{\"db.password\":\"DB_PWD\",\"db.host\":\"DB_HOST\",\"db.name\":\"DB_NAME\",\"db.user\":\"DB_USER\"}" \
+    -e APP_CONFIG_JSON="{\"db.password\":\"DB_PWD\",\"db.host\":\"DB_HOST\",\"db.name\":\"DB_NAME\",\"db.user\":\"DB_USER\",\"aws.s3.id\":\"S3_ID\",\"aws.s3.secret\":\"S3_SECRET\",\"aws.s3.region\":\"S3_REGION\"}" \
     -p 8080:8080 \
     sakaba/api
 ```
