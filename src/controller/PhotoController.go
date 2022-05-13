@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/base64"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,13 +29,7 @@ func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
 func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 	var json model.PhotoRequest
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		header, paramErr := ctx.FormFile("file_content")
-		if paramErr != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": paramErr.Error()})
-			return
-		}
-
-		file, fileErr := header.Open()
+		file, fileErr := base64.StdEncoding.DecodeString(json.FileContent)
 		if fileErr != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": fileErr.Error()})
 			return
@@ -65,6 +60,5 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 			"statusCode": 200,
 			"body":       "New photo is uploaded",
 		})
-
 	}
 }
