@@ -4,9 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"sakaba.link/api/src/repository"
-	"sakaba.link/api/src/service"
 )
 
 // PhotoController is a controller for Photo API.
@@ -35,31 +33,37 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 		})
 		return
 	}
-
-	s3Service := service.S3Service{}
-	fileName := uuid.New().String()
-	up, uploadErr := s3Service.Upload(restaurantID, fileName, file)
-	if uploadErr != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"statusCode": 500,
-			"error":      "Failed to upload file",
-			"uploader":   up,
-		})
-		return
-	}
-
-	photoRepository := repository.PhotoRepository{}
-	result := photoRepository.AddPhoto(restaurantID, fileName)
-	if result.Error != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"statusCode": 500,
-			"error":      "Failed to create a new photo meta data for the file",
-		})
-		return
-	}
-
 	ctx.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"body":       "New photo is uploaded",
+		"restaurant_id":   restaurantID,
+		"header.Filename": header.Filename,
+		"file":            file,
 	})
+	/*
+		s3Service := service.S3Service{}
+		fileName := uuid.New().String()
+		up, uploadErr := s3Service.Upload(restaurantID, fileName, file)
+		if uploadErr != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"statusCode": 500,
+				"error":      "Failed to upload file",
+				"uploader":   up,
+			})
+			return
+		}
+
+		photoRepository := repository.PhotoRepository{}
+		result := photoRepository.AddPhoto(restaurantID, fileName)
+		if result.Error != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"statusCode": 500,
+				"error":      "Failed to create a new photo meta data for the file",
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"statusCode": 200,
+			"body":       "New photo is uploaded",
+		})
+	*/
 }
