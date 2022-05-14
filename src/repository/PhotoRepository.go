@@ -31,11 +31,11 @@ func (c *PhotoRepository) GetAllPhotos() []model.PhotoView {
 func (c *PhotoRepository) AddPhoto(restaurantID string, fileName string) *gorm.DB {
 	photo := model.Photo{
 		RestaurantID: infrastructure.UUIDToBin(restaurantID),
+		Type:         "dish",
 		Name:         fileName,
 	}
 	db := infrastructure.ConnectToDB()
 	result := db.Create(&photo)
 	infrastructure.CloseDB(db)
-
 	return result
 }
