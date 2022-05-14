@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/base64"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -29,7 +30,8 @@ func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
 func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 	var json model.PhotoRequest
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		file, fileErr := base64.StdEncoding.DecodeString(json.FileContent)
+		base64Data := json.FileContent[strings.IndexByte(json.FileContent, ',')+1:]
+		file, fileErr := base64.StdEncoding.DecodeString(base64Data)
 		if fileErr != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": fileErr.Error()})
 			return
@@ -37,11 +39,10 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 
 		fileName := uuid.New().String()
 		s3Service := service.S3Service{}
-		s3Out, uploadErr := s3Service.Upload(json.RestaurantID, fileName, file)
+		uploadErr := s3Service.Upload(json.RestaurantID, fileName, file)
 		if uploadErr != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error":             uploadErr,
-				"S3PutObjectOutput": s3Out.String(),
+				"error": uploadErr.Error(),
 			})
 			return
 		}
