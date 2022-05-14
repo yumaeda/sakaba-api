@@ -37,11 +37,11 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 
 		fileName := uuid.New().String()
 		s3Service := service.S3Service{}
-		up, uploadErr := s3Service.Upload(json.RestaurantID, fileName, file)
+		s3Out, uploadErr := s3Service.Upload(json.RestaurantID, fileName, file)
 		if uploadErr != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"error":    "Failed to upload file",
-				"uploader": up,
+				"error":             uploadErr,
+				"S3PutObjectOutput": s3Out.String(),
 			})
 			return
 		}
@@ -58,7 +58,7 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 
 		ctx.JSON(http.StatusOK, gin.H{
 			"statusCode": 200,
-			"body":       "New photo is uploaded",
+			"body":       "New photo is added.",
 		})
 	}
 }
