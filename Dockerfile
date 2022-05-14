@@ -1,6 +1,6 @@
 FROM golang:alpine AS builder
 
-RUN apk add --no-cache upx
+RUN apk add --no-cache upx && apk add --no-cache ca-certificates
 
 ENV GIN_MODE=release
 ENV PORT=8080
@@ -18,5 +18,7 @@ RUN CGO_ENABLED=0 go build -ldflags "-s -w" -tags=nomsgpack -o server ./src/main
 EXPOSE $PORT
 
 FROM scratch as runner
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /go/src/server /opt/app/
+
 ENTRYPOINT ["/opt/app/server"]
