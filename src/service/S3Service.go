@@ -13,7 +13,7 @@ import (
 type S3Service struct{}
 
 // Upload uploads the file to AWS S3.
-func (c *S3Service) Upload(restaurantID string, fileName string, file []byte) (*s3.PutObjectOutput, error) {
+func (c *S3Service) Upload(restaurantID string, fileName string, file []byte) error {
 	s3Bucket := "admin.tokyo-takeout.com"
 	awsSession := infrastructure.ConnectToAws()
 	objectKey := fmt.Sprintf("images/restaurants/%s/%s.jpeg", restaurantID, fileName)
@@ -24,5 +24,6 @@ func (c *S3Service) Upload(restaurantID string, fileName string, file []byte) (*
 		Body:   bytes.NewReader(file),
 	}
 
-	return awsSession.PutObject(uploadParams)
+	_, err := awsSession.PutObject(uploadParams)
+	return err
 }
