@@ -14,6 +14,7 @@ type PhotoView struct {
 type Photo struct {
 	RestaurantID string `json:"restaurant_id"`
 	Name         string `json:"name"`
+	Type         string `json:"type"`
 }
 
 // PhotoRequest is an entity for Photo upload API.

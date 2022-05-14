@@ -28,6 +28,7 @@ func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
 
 // AddPhoto uploads the specified photo to the specified restaurant.
 func (c *PhotoController) AddPhoto(ctx *gin.Context) {
+	var errorMessage string
 	var json model.PhotoRequest
 	if err := ctx.ShouldBindJSON(&json); err == nil {
 		base64Data := json.FileContent[strings.IndexByte(json.FileContent, ',')+1:]
@@ -49,17 +50,19 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 
 		photoRepository := repository.PhotoRepository{}
 		result := photoRepository.AddPhoto(json.RestaurantID, fileName)
-		if result.Error != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"statusCode": 500,
-				"error":      "Failed to create a new photo meta data for the file",
+		if result.Error == nil {
+			ctx.JSON(http.StatusOK, gin.H{
+				"statusCode": 200,
+				"body":       "New photo is added.",
 			})
 			return
+		} else {
+			errorMessage = result.Error.Error()
 		}
-
-		ctx.JSON(http.StatusOK, gin.H{
-			"statusCode": 200,
-			"body":       "New photo is added.",
-		})
 	}
+
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"statusCode": 400,
+		"error":      "Photo insertion failed [" + errorMessage + "].",
+	})
 }
