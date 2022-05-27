@@ -80,6 +80,11 @@ brew install go
 go install golang.org/x/lint/golint@latest
 ```
 
+### Install shadow linter
+```sh
+go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow@latest
+```
+
 ### Linting and Vetting
 ```sh
 golint ./...
@@ -87,6 +92,10 @@ golint ./...
 
 ```sh
 go vet ./...
+```
+
+```sh
+shadow ./...
 ```
 
 ### List environment variables for Go
