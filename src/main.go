@@ -46,18 +46,22 @@ func main() {
 	adminController := controller.AdminController{}
 	cagegoyController := controller.CategoryController{}
 	dishController := controller.DishController{}
+	drinkController := controller.DrinkController{}
 	genreController := controller.GenreController{}
 	healtchCheckController := controller.HealthCheckController{}
 	photoController := controller.PhotoController{}
 	videoController := controller.VideoController{}
 	rankingController := controller.RankingController{}
 	restaurantController := controller.RestaurantController{}
+	restaurantDrinkController := controller.RestaurantDrinkController{}
 	restaurantGenreController := controller.RestaurantGenreController{}
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)
 	router.GET("/dishes/", dishController.GetAllDishes)
 	router.GET("/dishes/:id", dishController.GetDishByID)
+	router.GET("/drinks/", drinkController.GetAllDrinks)
+	router.GET("/drinks/:id", drinkController.GetDrinkByID)
 	router.GET("/genres/", genreController.GetAllGenres)
 	router.GET("/genres/:id", genreController.GetGenreByID)
 	router.GET("/health/", healtchCheckController.GetStatus)
@@ -76,6 +80,7 @@ func main() {
 	{
 		auth.GET("/home", adminController.Index)
 		auth.POST("/photo/", photoController.AddPhoto)
+		auth.POST("/restaurant-drink/", restaurantDrinkController.AddRestaurantDrink)
 		auth.POST("/restaurant-genre/", restaurantGenreController.AddRestaurantGenre)
 		auth.POST("/restaurant/", restaurantController.AddRestaurant)
 	}
