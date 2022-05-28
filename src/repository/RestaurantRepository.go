@@ -74,6 +74,39 @@ func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mod
 	return restaurants
 }
 
+// GetOpenRestaurantsByDrinkID returns the open restaurants for the specified drink.
+func (c *RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []model.RestaurantView {
+	restaurants := []model.RestaurantView{}
+	db := infrastructure.ConnectToDB()
+	db.Raw(`SELECT UuidFromBin(r.id) AS id,
+	               r.url,
+	               r.name,
+	               r.genre,
+	               r.tel,
+	               r.business_day_info,
+	               r.address,
+	               r.latitude,
+	               r.longitude,
+	               r.area,
+	               r.comment,
+	               r.takeout_available,
+	               COUNT(p.restaurant_id) AS photo_count
+                  FROM restaurants AS r
+                  JOIN restaurant_drinks AS rd
+                    ON r.id = rd.restaurant_id
+                  LEFT JOIN photos AS p
+                    ON r.id = p.restaurant_id
+                 WHERE is_closed = 0
+		   AND rd.drink_id = ` + drinkID + `
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                 GROUP BY r.id
+                 ORDER BY photo_count DESC`).Scan(&restaurants)
+	infrastructure.CloseDB(db)
+
+	return restaurants
+}
+
 // GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
 func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
 	restaurants := []model.RestaurantView{}
