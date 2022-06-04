@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -31,10 +32,17 @@ func ConnectToDB() *gorm.DB {
 		dbConfig.Name)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
 	if err != nil {
 		panic("Failed to connect to the specified database.")
 	}
+
+	sqlDB, sqlDBErr := db.DB()
+	if sqlDBErr != nil {
+		panic("Failed to retrieve inner database.")
+	}
+	sqlDB.SetMaxIdleConns(0)
+	sqlDB.SetMaxOpenConns(3)
+	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	return db
 }
