@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 	"sakaba.link/api/src/infrastructure"
 	"sakaba.link/api/src/model"
 )
@@ -159,7 +158,7 @@ func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount 
 }
 
 // AddRestaurant adds a new restaurant.
-func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) *gorm.DB {
+func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) error {
 	id := uuid.New()
 	restaurant := model.Restaurant{
 		ID:              infrastructure.UUIDToBin(id.String()),
@@ -174,7 +173,8 @@ func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre stri
 		Area:            area,
 	}
 	db := infrastructure.ConnectToDB()
-	result := db.Create(&restaurant)
+	dbError := db.Create(&restaurant).Error
 	infrastructure.CloseDB(db)
-	return result
+
+	return dbError
 }

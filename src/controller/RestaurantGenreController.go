@@ -16,8 +16,8 @@ func (c *RestaurantGenreController) AddRestaurantGenre(ctx *gin.Context) {
 	var json model.RestaurantGenre
 	if err := ctx.ShouldBindJSON(&json); err == nil {
 		restaurantGenreRepository := repository.RestaurantGenreRepository{}
-		result := restaurantGenreRepository.AddRestaurantGenre(json.RestaurantID, json.GenreID)
-		if result.Error == nil {
+		dbError := restaurantGenreRepository.AddRestaurantGenre(json.RestaurantID, json.GenreID)
+		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
 				"body":       "New restaurant genre is inserted.",

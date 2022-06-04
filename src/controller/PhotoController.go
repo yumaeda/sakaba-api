@@ -49,15 +49,15 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 		}
 
 		photoRepository := repository.PhotoRepository{}
-		result := photoRepository.AddPhoto(json.RestaurantID, fileName)
-		if result.Error == nil {
+		dbError := photoRepository.AddPhoto(json.RestaurantID, fileName)
+		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
 				"body":       "New photo is added.",
 			})
 			return
 		} else {
-			errorMessage = result.Error.Error()
+			errorMessage = dbError.Error()
 		}
 	}
 

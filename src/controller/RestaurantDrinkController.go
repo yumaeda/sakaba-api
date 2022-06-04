@@ -16,8 +16,8 @@ func (c *RestaurantDrinkController) AddRestaurantDrink(ctx *gin.Context) {
 	var json model.RestaurantDrink
 	if err := ctx.ShouldBindJSON(&json); err == nil {
 		restaurantDrinkRepository := repository.RestaurantDrinkRepository{}
-		result := restaurantDrinkRepository.AddRestaurantDrink(json.RestaurantID, json.DrinkID)
-		if result.Error == nil {
+		dbError := restaurantDrinkRepository.AddRestaurantDrink(json.RestaurantID, json.DrinkID)
+		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
 				"body":       "New restaurant drink is inserted.",

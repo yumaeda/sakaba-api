@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"sakaba.link/api/src/infrastructure"
 	"sakaba.link/api/src/model"
 )
@@ -28,14 +27,15 @@ func (c *PhotoRepository) GetAllPhotos() []model.PhotoView {
 }
 
 // AddPhoto adds meta data for the new photo.
-func (c *PhotoRepository) AddPhoto(restaurantID string, fileName string) *gorm.DB {
+func (c *PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
 	photo := model.Photo{
 		RestaurantID: infrastructure.UUIDToBin(restaurantID),
 		Type:         "dish",
 		Name:         fileName,
 	}
 	db := infrastructure.ConnectToDB()
-	result := db.Create(&photo)
+	dbError := db.Create(&photo).Error
 	infrastructure.CloseDB(db)
-	return result
+
+	return dbError
 }
