@@ -62,6 +62,7 @@ func UUIDToBin(uuid string) string {
 			panic("Error occurrs while retrieving a value")
 		}
 	}
+	CloseDB(db)
 
 	return bin
 }
