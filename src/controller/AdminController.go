@@ -16,10 +16,16 @@ type AdminController struct{}
 // Index returns welcome message in JSON format.
 func (c *AdminController) Index(ctx *gin.Context) {
 	claims := jwt.ExtractClaims(ctx)
-	user, _ := ctx.Get(identityKey)
-	ctx.JSON(http.StatusOK, gin.H{
-		"userID":   claims[identityKey],
-		"userName": user.(*model.User).UserName,
-		"text":     "Hello Admin.",
-	})
+	user, exists := ctx.Get(identityKey)
+	if exists {
+		ctx.JSON(http.StatusOK, gin.H{
+			"userID":   claims[identityKey],
+			"userName": user.(*model.User).UserName,
+			"text":     "Hello Admin.",
+		})
+	} else {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": "Cannot find claims in the current context.",
+		})
+	}
 }
