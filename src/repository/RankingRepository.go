@@ -10,8 +10,13 @@ type RankingRepository struct{}
 
 // GetAllRankings returns all the rankings.
 func (c *RankingRepository) GetAllRankings() []model.Ranking {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	allRankings := []model.Ranking{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT dishes.name AS 'dish',
 	               rankings.rank AS 'rank',
 	               restaurants.name AS 'restaurant',
@@ -26,7 +31,6 @@ func (c *RankingRepository) GetAllRankings() []model.Ranking {
                   JOIN restaurants
                     ON photos.restaurant_id = restaurants.id
                  ORDER BY dishes.name ASC, rankings.rank ASC`).Scan(&allRankings)
-	infrastructure.CloseDB(db)
 
 	return allRankings
 }

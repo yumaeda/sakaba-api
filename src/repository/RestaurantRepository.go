@@ -11,8 +11,13 @@ type RestaurantRepository struct{}
 
 // GetOpenRestaurants returns open restaurants.
 func (c *RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	restaurants := []model.RestaurantView{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.image_name,
@@ -35,15 +40,19 @@ func (c *RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  GROUP BY r.id
                  ORDER BY photo_count DESC`).Scan(&restaurants)
-	infrastructure.CloseDB(db)
 
 	return restaurants
 }
 
 // GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
 func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	restaurants := []model.RestaurantView{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.name,
@@ -68,15 +77,19 @@ func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mod
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  GROUP BY r.id
                  ORDER BY photo_count DESC`).Scan(&restaurants)
-	infrastructure.CloseDB(db)
 
 	return restaurants
 }
 
 // GetOpenRestaurantsByDrinkID returns the open restaurants for the specified drink.
 func (c *RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []model.RestaurantView {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	restaurants := []model.RestaurantView{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.name,
@@ -101,15 +114,19 @@ func (c *RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []mod
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  GROUP BY r.id
                  ORDER BY photo_count DESC`).Scan(&restaurants)
-	infrastructure.CloseDB(db)
 
 	return restaurants
 }
 
 // GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
 func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	restaurants := []model.RestaurantView{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.name,
@@ -135,15 +152,19 @@ func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  ORDER BY rk.rank ASC`).Scan(&restaurants)
-	infrastructure.CloseDB(db)
 
 	return restaurants
 }
 
 // GetOpenRestaurantCount returns the number of open restaurants.
 func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	restaurantCounts := []model.RestaurantCount{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT area,
                        COUNT(area) AS count
                   FROM restaurants
@@ -152,13 +173,18 @@ func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount 
                    AND REPLACE(JSON_EXTRACT(business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  GROUP BY area
                  ORDER BY COUNT(area) DESC`).Scan(&restaurantCounts)
-	infrastructure.CloseDB(db)
 
 	return restaurantCounts
 }
 
 // AddRestaurant adds a new restaurant.
 func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) error {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	id := uuid.New()
 	restaurant := model.Restaurant{
 		ID:              infrastructure.UUIDToBin(id.String()),
@@ -172,9 +198,7 @@ func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre stri
 		Longitude:       longitude,
 		Area:            area,
 	}
-	db := infrastructure.ConnectToDB()
 	dbError := db.Create(&restaurant).Error
-	infrastructure.CloseDB(db)
 
 	return dbError
 }

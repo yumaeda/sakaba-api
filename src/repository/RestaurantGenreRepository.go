@@ -10,13 +10,17 @@ type RestaurantGenreRepository struct{}
 
 // AddRestaurantGenre adds a new genre for the specified restaurant.
 func (c *RestaurantGenreRepository) AddRestaurantGenre(restaurantID string, genreID string) error {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	restaurantGenre := model.RestaurantGenre{
 		RestaurantID: infrastructure.UUIDToBin(restaurantID),
 		GenreID:      genreID,
 	}
-	db := infrastructure.ConnectToDB()
 	dbError := db.Create(&restaurantGenre).Error
-	infrastructure.CloseDB(db)
 
 	return dbError
 }

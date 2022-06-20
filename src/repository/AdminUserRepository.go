@@ -10,13 +10,17 @@ type AdminUserRepository struct{}
 
 // GetAdminUserByEmail returns an admin user specfied by email.
 func (c *AdminUserRepository) GetAdminUserByEmail(email string) model.AdminUser {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	adminUser := model.AdminUser{}
-	db := infrastructure.ConnectToDB()
 	db.Table("admin_users").
 		Select("id", "email", "password").
 		Where("email = ?", email).
 		Scan(&adminUser)
-	infrastructure.CloseDB(db)
 
 	return adminUser
 }

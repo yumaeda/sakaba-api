@@ -10,26 +10,34 @@ type GenreRepository struct{}
 
 // GetAllGenres returns all the genres.
 func (c *GenreRepository) GetAllGenres() []model.Genre {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	allGenres := []model.Genre{}
-	db := infrastructure.ConnectToDB()
 	db.Table("genres").
 		Select("id", "name").
 		Order("name ASC").
 		Scan(&allGenres)
-	infrastructure.CloseDB(db)
 
 	return allGenres
 }
 
 // GetGenreByID returns the specified genre.
 func (c *GenreRepository) GetGenreByID(id string) model.Genre {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	genre := model.Genre{}
-	db := infrastructure.ConnectToDB()
 	db.Table("genres").
 		Select("id", "name").
 		Where("id = ?", id).
 		Scan(&genre)
-	infrastructure.CloseDB(db)
 
 	return genre
 }

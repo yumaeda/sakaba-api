@@ -10,8 +10,13 @@ type PhotoRepository struct{}
 
 // GetAllPhotos returns all the photos.
 func (c *PhotoRepository) GetAllPhotos() []model.PhotoView {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	allPhotos := []model.PhotoView{}
-	db := infrastructure.ConnectToDB()
 	db.Raw(`SELECT UuidFromBin(r.id) AS restaurant_id,
                        CONCAT(p.name, '.jpg') AS image,
                        CONCAT(p.name, '.webp') AS image_webp,
@@ -21,21 +26,24 @@ func (c *PhotoRepository) GetAllPhotos() []model.PhotoView {
                   JOIN restaurants AS r
                     ON p.restaurant_id = r.id
                  ORDER BY p.create_time DESC`).Scan(&allPhotos)
-	infrastructure.CloseDB(db)
 
 	return allPhotos
 }
 
 // AddPhoto adds meta data for the new photo.
 func (c *PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
 	photo := model.Photo{
 		RestaurantID: infrastructure.UUIDToBin(restaurantID),
 		Type:         "dish",
 		Name:         fileName,
 	}
-	db := infrastructure.ConnectToDB()
 	dbError := db.Create(&photo).Error
-	infrastructure.CloseDB(db)
 
 	return dbError
 }
