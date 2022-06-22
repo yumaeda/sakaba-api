@@ -17,8 +17,7 @@ type RestaurantDrinkController struct {
 func (c *RestaurantDrinkController) AddRestaurantDrink(ctx *gin.Context) {
 	var json model.RestaurantDrink
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		restaurantDrinkRepository := repository.RestaurantDrinkRepository{}
-		dbError := restaurantDrinkRepository.AddRestaurantDrink(json.RestaurantID, json.DrinkID)
+		dbError := c.Repository.AddRestaurantDrink(json.RestaurantID, json.DrinkID)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
