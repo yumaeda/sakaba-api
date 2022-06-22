@@ -9,7 +9,7 @@ import (
 type AdminUserRepository struct{}
 
 // GetAdminUserByEmail returns an admin user specfied by email.
-func (c *AdminUserRepository) GetAdminUserByEmail(email string) model.AdminUser {
+func (c AdminUserRepository) GetAdminUserByEmail(email string) model.AdminUser {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

@@ -18,7 +18,7 @@ type PhotoController struct {
 }
 
 // GetAllPhotos returns all the photos.
-func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
+func (c PhotoController) GetAllPhotos(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetAllPhotos(),
@@ -26,7 +26,7 @@ func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
 }
 
 // AddPhoto uploads the specified photo to the specified restaurant.
-func (c *PhotoController) AddPhoto(ctx *gin.Context) {
+func (c PhotoController) AddPhoto(ctx *gin.Context) {
 	var errorMessage string
 	var json model.PhotoRequest
 	if err := ctx.ShouldBindJSON(&json); err == nil {

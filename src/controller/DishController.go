@@ -13,7 +13,7 @@ type DishController struct {
 }
 
 // GetAllDishes returns all the dishes.
-func (c *DishController) GetAllDishes(ctx *gin.Context) {
+func (c DishController) GetAllDishes(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetAllDishes(),
@@ -21,7 +21,7 @@ func (c *DishController) GetAllDishes(ctx *gin.Context) {
 }
 
 // GetDishByID returns the specified dish.
-func (c *DishController) GetDishByID(ctx *gin.Context) {
+func (c DishController) GetDishByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetDishByID(ctx.Param("id")),

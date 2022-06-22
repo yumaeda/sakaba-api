@@ -9,7 +9,7 @@ import (
 type PhotoRepository struct{}
 
 // GetAllPhotos returns all the photos.
-func (c *PhotoRepository) GetAllPhotos() []model.PhotoView {
+func (c PhotoRepository) GetAllPhotos() []model.PhotoView {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -31,7 +31,7 @@ func (c *PhotoRepository) GetAllPhotos() []model.PhotoView {
 }
 
 // AddPhoto adds meta data for the new photo.
-func (c *PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
+func (c PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

@@ -13,7 +13,7 @@ type RankingController struct {
 }
 
 // GetAllRankings returns all the rankings.
-func (c *RankingController) GetAllRankings(ctx *gin.Context) {
+func (c RankingController) GetAllRankings(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetAllRankings(),

@@ -9,7 +9,7 @@ import (
 type CategoryRepository struct{}
 
 // GetCategories returns the categories for the specified restaurants.
-func (c *CategoryRepository) GetCategories(restaurantID string) []model.Category {
+func (c CategoryRepository) GetCategories(restaurantID string) []model.Category {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

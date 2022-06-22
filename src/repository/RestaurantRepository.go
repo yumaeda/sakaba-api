@@ -10,7 +10,7 @@ import (
 type RestaurantRepository struct{}
 
 // GetOpenRestaurants returns open restaurants.
-func (c *RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
+func (c RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -45,7 +45,7 @@ func (c *RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
 }
 
 // GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
-func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
+func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -82,7 +82,7 @@ func (c *RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mod
 }
 
 // GetOpenRestaurantsByDrinkID returns the open restaurants for the specified drink.
-func (c *RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []model.RestaurantView {
+func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []model.RestaurantView {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -119,7 +119,7 @@ func (c *RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []mod
 }
 
 // GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
-func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
+func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -157,7 +157,7 @@ func (c *RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model
 }
 
 // GetOpenRestaurantCount returns the number of open restaurants.
-func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
+func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -178,7 +178,7 @@ func (c *RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount 
 }
 
 // AddRestaurant adds a new restaurant.
-func (c *RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) error {
+func (c RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) error {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

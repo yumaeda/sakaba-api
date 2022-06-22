@@ -9,7 +9,7 @@ import (
 type DrinkRepository struct{}
 
 // GetAllDrinks returns all the drinks.
-func (c *DrinkRepository) GetAllDrinks() []model.Drink {
+func (c DrinkRepository) GetAllDrinks() []model.Drink {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -26,7 +26,7 @@ func (c *DrinkRepository) GetAllDrinks() []model.Drink {
 }
 
 // GetDrinkByID returns the specified drink.
-func (c *DrinkRepository) GetDrinkByID(id string) model.Drink {
+func (c DrinkRepository) GetDrinkByID(id string) model.Drink {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

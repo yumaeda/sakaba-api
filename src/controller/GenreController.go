@@ -13,7 +13,7 @@ type GenreController struct {
 }
 
 // GetAllGenres returns all the genres.
-func (c *GenreController) GetAllGenres(ctx *gin.Context) {
+func (c GenreController) GetAllGenres(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetAllGenres(),
@@ -21,7 +21,7 @@ func (c *GenreController) GetAllGenres(ctx *gin.Context) {
 }
 
 // GetGenreByID returns the specified genre.
-func (c *GenreController) GetGenreByID(ctx *gin.Context) {
+func (c GenreController) GetGenreByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetGenreByID(ctx.Param("id")),

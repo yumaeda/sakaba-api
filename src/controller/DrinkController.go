@@ -13,7 +13,7 @@ type DrinkController struct {
 }
 
 // GetAllDrinks returns all the drinks.
-func (c *DrinkController) GetAllDrinks(ctx *gin.Context) {
+func (c DrinkController) GetAllDrinks(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetAllDrinks(),
@@ -21,7 +21,7 @@ func (c *DrinkController) GetAllDrinks(ctx *gin.Context) {
 }
 
 // GetDrinkByID returns the specified drink.
-func (c *DrinkController) GetDrinkByID(ctx *gin.Context) {
+func (c DrinkController) GetDrinkByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetDrinkByID(ctx.Param("id")),

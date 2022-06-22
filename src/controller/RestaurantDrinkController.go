@@ -14,7 +14,7 @@ type RestaurantDrinkController struct {
 }
 
 // AddRestaurantDrink adds the specified genre to the specified restaurant.
-func (c *RestaurantDrinkController) AddRestaurantDrink(ctx *gin.Context) {
+func (c RestaurantDrinkController) AddRestaurantDrink(ctx *gin.Context) {
 	var json model.RestaurantDrink
 	if err := ctx.ShouldBindJSON(&json); err == nil {
 		dbError := c.Repository.AddRestaurantDrink(json.RestaurantID, json.DrinkID)

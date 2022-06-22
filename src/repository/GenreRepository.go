@@ -9,7 +9,7 @@ import (
 type GenreRepository struct{}
 
 // GetAllGenres returns all the genres.
-func (c *GenreRepository) GetAllGenres() []model.Genre {
+func (c GenreRepository) GetAllGenres() []model.Genre {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -26,7 +26,7 @@ func (c *GenreRepository) GetAllGenres() []model.Genre {
 }
 
 // GetGenreByID returns the specified genre.
-func (c *GenreRepository) GetGenreByID(id string) model.Genre {
+func (c GenreRepository) GetGenreByID(id string) model.Genre {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

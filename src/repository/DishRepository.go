@@ -9,7 +9,7 @@ import (
 type DishRepository struct{}
 
 // GetAllDishes returns all the dishes.
-func (c *DishRepository) GetAllDishes() []model.Dish {
+func (c DishRepository) GetAllDishes() []model.Dish {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -26,7 +26,7 @@ func (c *DishRepository) GetAllDishes() []model.Dish {
 }
 
 // GetDishByID returns the specified dish.
-func (c *DishRepository) GetDishByID(id string) model.Dish {
+func (c DishRepository) GetDishByID(id string) model.Dish {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

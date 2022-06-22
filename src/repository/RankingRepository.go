@@ -9,7 +9,7 @@ import (
 type RankingRepository struct{}
 
 // GetAllRankings returns all the rankings.
-func (c *RankingRepository) GetAllRankings() []model.Ranking {
+func (c RankingRepository) GetAllRankings() []model.Ranking {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

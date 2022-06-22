@@ -9,7 +9,7 @@ import (
 type VideoRepository struct{}
 
 // GetAllVideos returns all the videos.
-func (c *VideoRepository) GetAllVideos() []model.Video {
+func (c VideoRepository) GetAllVideos() []model.Video {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())
@@ -23,7 +23,7 @@ func (c *VideoRepository) GetAllVideos() []model.Video {
 }
 
 // GetVideosByRestaurantID returns videos for the specified restaurant.
-func (c *VideoRepository) GetVideosByRestaurantID(id string) []model.SimpleVideo {
+func (c VideoRepository) GetVideosByRestaurantID(id string) []model.SimpleVideo {
 	db, closer, err := infrastructure.ConnectToDB()
 	if err != nil {
 		panic(err.Error())

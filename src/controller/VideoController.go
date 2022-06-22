@@ -13,7 +13,7 @@ type VideoController struct {
 }
 
 // GetAllVideos returns all the videos.
-func (c *VideoController) GetAllVideos(ctx *gin.Context) {
+func (c VideoController) GetAllVideos(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetAllVideos(),
@@ -21,7 +21,7 @@ func (c *VideoController) GetAllVideos(ctx *gin.Context) {
 }
 
 // GetVideosByRestaurantID returns videos for the restaurant.
-func (c *VideoController) GetVideosByRestaurantID(ctx *gin.Context) {
+func (c VideoController) GetVideosByRestaurantID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
 		"body":       c.Repository.GetVideosByRestaurantID(ctx.Param("id")),

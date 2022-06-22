@@ -14,7 +14,7 @@ type RestaurantGenreController struct {
 }
 
 // AddRestaurantGenre adds the specified genre to the specified restaurant.
-func (c *RestaurantGenreController) AddRestaurantGenre(ctx *gin.Context) {
+func (c RestaurantGenreController) AddRestaurantGenre(ctx *gin.Context) {
 	var json model.RestaurantGenre
 	if err := ctx.ShouldBindJSON(&json); err == nil {
 		dbError := c.Repository.AddRestaurantGenre(json.RestaurantID, json.GenreID)

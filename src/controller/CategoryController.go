@@ -13,7 +13,7 @@ type CategoryController struct {
 }
 
 // GetCategoriesByRestaurantID returns categories for the specified restaurant.
-func (c *CategoryController) GetCategoriesByRestaurantID(ctx *gin.Context) {
+func (c CategoryController) GetCategoriesByRestaurantID(ctx *gin.Context) {
 	categories := c.Repository.GetCategories(ctx.Param("id"))
 
 	ctx.JSON(http.StatusOK, gin.H{

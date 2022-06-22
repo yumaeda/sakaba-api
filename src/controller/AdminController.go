@@ -14,7 +14,7 @@ var identityKey = "id"
 type AdminController struct{}
 
 // Index returns welcome message in JSON format.
-func (c *AdminController) Index(ctx *gin.Context) {
+func (c AdminController) Index(ctx *gin.Context) {
 	claims := jwt.ExtractClaims(ctx)
 	user, exists := ctx.Get(identityKey)
 	if exists {

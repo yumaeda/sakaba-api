@@ -10,6 +10,6 @@ import (
 type HealthCheckController struct{}
 
 // GetStatus returns health status message in JSON format.
-func (c *HealthCheckController) GetStatus(ctx *gin.Context) {
+func (c HealthCheckController) GetStatus(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "API server is up and running."})
 }
