@@ -8,6 +8,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"sakaba.link/api/src/controller"
+	"sakaba.link/api/src/infrastructure"
 	"sakaba.link/api/src/middleware"
 	"sakaba.link/api/src/repository"
 )
@@ -44,18 +45,24 @@ func main() {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
 
-	adminController := controller.AdminController{}
-	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{}}
-	dishController := controller.DishController{Repository: repository.DishRepository{}}
-	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{}}
-	genreController := controller.GenreController{Repository: repository.GenreRepository{}}
+	db, closer, err := infrastructure.ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
+	adminController := controller.AdminController{Repository: repository.AdminUserRepository{DB: db}}
+	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{DB: db}}
+	dishController := controller.DishController{Repository: repository.DishRepository{DB: db}}
+	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: db}}
+	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: db}}
 	healtchCheckController := controller.HealthCheckController{}
-	photoController := controller.PhotoController{Repository: repository.PhotoRepository{}}
-	videoController := controller.VideoController{Repository: repository.VideoRepository{}}
-	rankingController := controller.RankingController{Repository: repository.RankingRepository{}}
-	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{}}
-	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{}}
-	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{}}
+	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: db}}
+	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: db}}
+	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: db}}
+	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{DB: db}}
+	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{DB: db}}
+	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: db}}
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)

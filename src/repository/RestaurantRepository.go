@@ -2,23 +2,20 @@ package repository
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 	"sakaba.link/api/src/infrastructure"
 	"sakaba.link/api/src/model"
 )
 
 // RestaurantRepository is responsible for reading from and writing to DB Table `restaurants`.
-type RestaurantRepository struct{}
+type RestaurantRepository struct {
+	DB *gorm.DB
+}
 
 // GetOpenRestaurants returns open restaurants.
 func (c RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	restaurants := []model.RestaurantView{}
-	db.Raw(`SELECT UuidFromBin(r.id) AS id,
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.image_name,
 	               r.name,
@@ -46,14 +43,8 @@ func (c RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
 
 // GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
 func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	restaurants := []model.RestaurantView{}
-	db.Raw(`SELECT UuidFromBin(r.id) AS id,
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.name,
 	               r.genre,
@@ -83,14 +74,8 @@ func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mode
 
 // GetOpenRestaurantsByDrinkID returns the open restaurants for the specified drink.
 func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []model.RestaurantView {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	restaurants := []model.RestaurantView{}
-	db.Raw(`SELECT UuidFromBin(r.id) AS id,
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.name,
 	               r.genre,
@@ -120,14 +105,8 @@ func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []mode
 
 // GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
 func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	restaurants := []model.RestaurantView{}
-	db.Raw(`SELECT UuidFromBin(r.id) AS id,
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
 	               r.url,
 	               r.name,
 	               r.genre,
@@ -158,14 +137,8 @@ func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.
 
 // GetOpenRestaurantCount returns the number of open restaurants.
 func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	restaurantCounts := []model.RestaurantCount{}
-	db.Raw(`SELECT area,
+	c.DB.Raw(`SELECT area,
                        COUNT(area) AS count
                   FROM restaurants
                  WHERE is_closed = 0
@@ -179,12 +152,6 @@ func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
 
 // AddRestaurant adds a new restaurant.
 func (c RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) error {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	id := uuid.New()
 	restaurant := model.Restaurant{
 		ID:              infrastructure.UUIDToBin(id.String()),
@@ -198,7 +165,7 @@ func (c RestaurantRepository) AddRestaurant(URL string, name string, genre strin
 		Longitude:       longitude,
 		Area:            area,
 	}
-	dbError := db.Create(&restaurant).Error
+	dbError := c.DB.Create(&restaurant).Error
 
 	return dbError
 }

@@ -1,23 +1,20 @@
 package repository
 
 import (
+	"gorm.io/gorm"
 	"sakaba.link/api/src/infrastructure"
 	"sakaba.link/api/src/model"
 )
 
 // PhotoRepository is responsible for reading from and writing to DB Table `photos`.
-type PhotoRepository struct{}
+type PhotoRepository struct {
+	DB *gorm.DB
+}
 
 // GetAllPhotos returns all the photos.
 func (c PhotoRepository) GetAllPhotos() []model.PhotoView {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	allPhotos := []model.PhotoView{}
-	db.Raw(`SELECT UuidFromBin(r.id) AS restaurant_id,
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS restaurant_id,
                        CONCAT(p.name, '.jpg') AS image,
                        CONCAT(p.name, '.webp') AS image_webp,
                        CONCAT(p.name, '_thumbnail.jpg') AS thumbnail,
@@ -32,18 +29,12 @@ func (c PhotoRepository) GetAllPhotos() []model.PhotoView {
 
 // AddPhoto adds meta data for the new photo.
 func (c PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	photo := model.Photo{
 		RestaurantID: infrastructure.UUIDToBin(restaurantID),
 		Type:         "dish",
 		Name:         fileName,
 	}
-	dbError := db.Create(&photo).Error
+	dbError := c.DB.Create(&photo).Error
 
 	return dbError
 }

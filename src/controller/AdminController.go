@@ -6,12 +6,15 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"sakaba.link/api/src/model"
+	"sakaba.link/api/src/repository"
 )
 
 var identityKey = "id"
 
 // AdminController is a controller for Admin API.
-type AdminController struct{}
+type AdminController struct {
+	Repository repository.AdminUserRepository
+}
 
 // Index returns welcome message in JSON format.
 func (c AdminController) Index(ctx *gin.Context) {

@@ -1,23 +1,19 @@
 package repository
 
 import (
-	"sakaba.link/api/src/infrastructure"
+	"gorm.io/gorm"
 	"sakaba.link/api/src/model"
 )
 
 // RankingRepository is responsible for reading from and writing to DB Table `rankings`.
-type RankingRepository struct{}
+type RankingRepository struct {
+	DB *gorm.DB
+}
 
 // GetAllRankings returns all the rankings.
 func (c RankingRepository) GetAllRankings() []model.Ranking {
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
-	}
-	defer closer()
-
 	allRankings := []model.Ranking{}
-	db.Raw(`SELECT dishes.name AS 'dish',
+	c.DB.Raw(`SELECT dishes.name AS 'dish',
 	               rankings.rank AS 'rank',
 	               restaurants.name AS 'restaurant',
 	               UuidFromBin(restaurants.id) AS 'restaurant_id',
