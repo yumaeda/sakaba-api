@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"sakaba.link/api/src/controller"
 	"sakaba.link/api/src/middleware"
+	"sakaba.link/api/src/repository"
 )
 
 var realm = "Sakaba Link Zone"
@@ -44,17 +45,17 @@ func main() {
 	})
 
 	adminController := controller.AdminController{}
-	cagegoyController := controller.CategoryController{}
-	dishController := controller.DishController{}
-	drinkController := controller.DrinkController{}
-	genreController := controller.GenreController{}
+	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{}}
+	dishController := controller.DishController{Repository: repository.DishRepository{}}
+	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{}}
+	genreController := controller.GenreController{Repository: repository.GenreRepository{}}
 	healtchCheckController := controller.HealthCheckController{}
-	photoController := controller.PhotoController{}
-	videoController := controller.VideoController{}
-	rankingController := controller.RankingController{}
-	restaurantController := controller.RestaurantController{}
-	restaurantDrinkController := controller.RestaurantDrinkController{}
-	restaurantGenreController := controller.RestaurantGenreController{}
+	photoController := controller.PhotoController{Repository: repository.PhotoRepository{}}
+	videoController := controller.VideoController{Repository: repository.VideoRepository{}}
+	rankingController := controller.RankingController{Repository: repository.RankingRepository{}}
+	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{}}
+	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{}}
+	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{}}
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)

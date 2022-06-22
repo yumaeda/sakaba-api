@@ -13,16 +13,15 @@ import (
 )
 
 // PhotoController is a controller for Photo API.
-type PhotoController struct{}
+type PhotoController struct {
+	Repository repository.PhotoRepository
+}
 
 // GetAllPhotos returns all the photos.
 func (c *PhotoController) GetAllPhotos(ctx *gin.Context) {
-	photoRepository := repository.PhotoRepository{}
-	allPhotos := photoRepository.GetAllPhotos()
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       allPhotos,
+		"body":       c.Repository.GetAllPhotos(),
 	})
 }
 
@@ -48,8 +47,7 @@ func (c *PhotoController) AddPhoto(ctx *gin.Context) {
 			return
 		}
 
-		photoRepository := repository.PhotoRepository{}
-		dbError := photoRepository.AddPhoto(json.RestaurantID, fileName)
+		dbError := c.Repository.AddPhoto(json.RestaurantID, fileName)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,

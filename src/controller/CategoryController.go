@@ -8,12 +8,13 @@ import (
 )
 
 // CategoryController is a controller for Category API.
-type CategoryController struct{}
+type CategoryController struct {
+	Repository repository.CategoryRepository
+}
 
 // GetCategoriesByRestaurantID returns categories for the specified restaurant.
 func (c *CategoryController) GetCategoriesByRestaurantID(ctx *gin.Context) {
-	categoyRepository := repository.CategoryRepository{}
-	categories := categoyRepository.GetCategories(ctx.Param("id"))
+	categories := c.Repository.GetCategories(ctx.Param("id"))
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,

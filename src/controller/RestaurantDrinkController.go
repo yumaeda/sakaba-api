@@ -9,7 +9,9 @@ import (
 )
 
 // RestaurantDrinkController is a controller for Drink API.
-type RestaurantDrinkController struct{}
+type RestaurantDrinkController struct {
+	Repository repository.RestaurantDrinkRepository
+}
 
 // AddRestaurantDrink adds the specified genre to the specified restaurant.
 func (c *RestaurantDrinkController) AddRestaurantDrink(ctx *gin.Context) {

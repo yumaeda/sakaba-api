@@ -8,26 +8,22 @@ import (
 )
 
 // DishController is a controller for Dish API.
-type DishController struct{}
+type DishController struct {
+	Repository repository.DishRepository
+}
 
 // GetAllDishes returns all the dishes.
 func (c *DishController) GetAllDishes(ctx *gin.Context) {
-	dishRepository := repository.DishRepository{}
-	allDishes := dishRepository.GetAllDishes()
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       allDishes,
+		"body":       c.Repository.GetAllDishes(),
 	})
 }
 
 // GetDishByID returns the specified dish.
 func (c *DishController) GetDishByID(ctx *gin.Context) {
-	dishRepository := repository.DishRepository{}
-	dish := dishRepository.GetDishByID(ctx.Param("id"))
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       dish,
+		"body":       c.Repository.GetDishByID(ctx.Param("id")),
 	})
 }

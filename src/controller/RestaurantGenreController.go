@@ -9,14 +9,15 @@ import (
 )
 
 // RestaurantGenreController is a controller for Genre API.
-type RestaurantGenreController struct{}
+type RestaurantGenreController struct {
+	Repository repository.RestaurantGenreRepository
+}
 
 // AddRestaurantGenre adds the specified genre to the specified restaurant.
 func (c *RestaurantGenreController) AddRestaurantGenre(ctx *gin.Context) {
 	var json model.RestaurantGenre
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		restaurantGenreRepository := repository.RestaurantGenreRepository{}
-		dbError := restaurantGenreRepository.AddRestaurantGenre(json.RestaurantID, json.GenreID)
+		dbError := c.Repository.AddRestaurantGenre(json.RestaurantID, json.GenreID)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,

@@ -8,27 +8,22 @@ import (
 )
 
 // VideoController is a controller for Video API.
-type VideoController struct{}
+type VideoController struct {
+	Repository repository.VideoRepository
+}
 
 // GetAllVideos returns all the videos.
 func (c *VideoController) GetAllVideos(ctx *gin.Context) {
-	videoRepository := repository.VideoRepository{}
-	allVideos := videoRepository.GetAllVideos()
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       allVideos,
+		"body":       c.Repository.GetAllVideos(),
 	})
 }
 
 // GetVideosByRestaurantID returns videos for the restaurant.
 func (c *VideoController) GetVideosByRestaurantID(ctx *gin.Context) {
-	id := ctx.Param("id")
-	videoRepository := repository.VideoRepository{}
-	videos := videoRepository.GetVideosByRestaurantID(id)
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       videos,
+		"body":       c.Repository.GetVideosByRestaurantID(ctx.Param("id")),
 	})
 }

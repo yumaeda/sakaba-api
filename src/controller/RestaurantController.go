@@ -9,60 +9,47 @@ import (
 )
 
 // RestaurantController is a controller for Restaurant API.
-type RestaurantController struct{}
+type RestaurantController struct {
+	Repository repository.RestaurantRepository
+}
 
 // GetOpenRestaurants returns open restaurants.
 func (c *RestaurantController) GetOpenRestaurants(ctx *gin.Context) {
-	restaurantRepository := repository.RestaurantRepository{}
-	restaurants := restaurantRepository.GetOpenRestaurants()
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       restaurants,
+		"body":       c.Repository.GetOpenRestaurants(),
 	})
 }
 
 // GetOpenRestaurantsByGenreID returns open restaurants for the specified genre.
 func (c *RestaurantController) GetOpenRestaurantsByGenreID(ctx *gin.Context) {
-	restaurantRepository := repository.RestaurantRepository{}
-	restaurants := restaurantRepository.GetOpenRestaurantsByGenreID(ctx.Param("id"))
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       restaurants,
+		"body":       c.Repository.GetOpenRestaurantsByGenreID(ctx.Param("id")),
 	})
 }
 
 // GetOpenRestaurantsByDrinkID returns open restaurants for the specified drink.
 func (c *RestaurantController) GetOpenRestaurantsByDrinkID(ctx *gin.Context) {
-	restaurantRepository := repository.RestaurantRepository{}
-	restaurants := restaurantRepository.GetOpenRestaurantsByDrinkID(ctx.Param("id"))
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       restaurants,
+		"body":       c.Repository.GetOpenRestaurantsByDrinkID(ctx.Param("id")),
 	})
 }
 
 // GetOpenRestaurantsByDishID returns open restaurants for the specified dish.
 func (c *RestaurantController) GetOpenRestaurantsByDishID(ctx *gin.Context) {
-	restaurantRepository := repository.RestaurantRepository{}
-	restaurants := restaurantRepository.GetOpenRestaurantsByDishID(ctx.Param("id"))
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       restaurants,
+		"body":       c.Repository.GetOpenRestaurantsByDishID(ctx.Param("id")),
 	})
 }
 
 // GetOpenRestaurantCount returns number of open restaurants.
 func (c *RestaurantController) GetOpenRestaurantCount(ctx *gin.Context) {
-	restaurantRepository := repository.RestaurantRepository{}
-	restaurantCount := restaurantRepository.GetOpenRestaurantCount()
-
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       restaurantCount,
+		"body":       c.Repository.GetOpenRestaurantCount(),
 	})
 }
 
@@ -70,8 +57,7 @@ func (c *RestaurantController) GetOpenRestaurantCount(ctx *gin.Context) {
 func (c *RestaurantController) AddRestaurant(ctx *gin.Context) {
 	var json model.Restaurant
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		restaurantRepository := repository.RestaurantRepository{}
-		dbError := restaurantRepository.AddRestaurant(json.URL, json.Name, json.Genre, json.Tel, json.BusinessDayInfo, json.Address, json.Latitude, json.Longitude, json.Area)
+		dbError := c.Repository.AddRestaurant(json.URL, json.Name, json.Genre, json.Tel, json.BusinessDayInfo, json.Address, json.Latitude, json.Longitude, json.Area)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
