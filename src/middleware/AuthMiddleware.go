@@ -6,8 +6,8 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/model"
-	"sakaba.link/api/src/repository"
+	"github.com/yumaeda/sakaba-api/src/model"
+	"github.com/yumaeda/sakaba-api/src/repository"
 )
 
 type AuthMiddleware struct{}

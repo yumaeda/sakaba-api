@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/model"
-	"sakaba.link/api/src/repository"
+	"github.com/yumaeda/sakaba-api/src/model"
+	"github.com/yumaeda/sakaba-api/src/repository"
 )
 
 // RestaurantDrinkController is a controller for Drink API.

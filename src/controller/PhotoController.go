@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"sakaba.link/api/src/model"
-	"sakaba.link/api/src/repository"
-	"sakaba.link/api/src/service"
+	"github.com/yumaeda/sakaba-api/src/model"
+	"github.com/yumaeda/sakaba-api/src/repository"
+	"github.com/yumaeda/sakaba-api/src/service"
 )
 
 // PhotoController is a controller for Photo API.

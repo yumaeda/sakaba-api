@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/repository"
+	"github.com/yumaeda/sakaba-api/src/repository"
 )
 
 // GenreController is a controller for Genre API.

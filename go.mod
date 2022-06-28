@@ -1,17 +1,18 @@
-module sakaba.link/api
+module github.com/yumaeda/sakaba-api
 
 go 1.17
 
 require (
+	github.com/appleboy/gin-jwt/v2 v2.8.0
+	github.com/aws/aws-sdk-go v1.44.9
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
+	github.com/google/uuid v1.3.0
 	gorm.io/driver/mysql v1.2.0
 	gorm.io/gorm v1.22.3
 )
 
 require (
-	github.com/appleboy/gin-jwt/v2 v2.8.0 // indirect
-	github.com/aws/aws-sdk-go v1.44.9 // indirect
-	github.com/gin-contrib/cors v1.3.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
@@ -19,7 +20,6 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect

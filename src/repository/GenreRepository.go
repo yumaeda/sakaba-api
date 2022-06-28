@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"github.com/yumaeda/sakaba-api/src/model"
 	"gorm.io/gorm"
-	"sakaba.link/api/src/model"
 )
 
 // GenreRepository is responsible for reading from and writing to DB Table `genres`.

@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"sakaba.link/api/src/infrastructure"
+	"github.com/yumaeda/sakaba-api/src/infrastructure"
 )
 
 // S3Service handle AWS S3 operations.

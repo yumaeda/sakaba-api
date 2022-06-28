@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"sakaba.link/api/src/infrastructure"
-	"sakaba.link/api/src/model"
+	"github.com/yumaeda/sakaba-api/src/infrastructure"
+	"github.com/yumaeda/sakaba-api/src/model"
 )
 
 // AdminUserRepository is responsible for reading from and writing to DB Table `admin_users`.

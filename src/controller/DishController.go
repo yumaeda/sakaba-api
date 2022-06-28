@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/repository"
+	"github.com/yumaeda/sakaba-api/src/repository"
 )
 
 // DishController is a controller for Dish API.

@@ -7,10 +7,10 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/controller"
-	"sakaba.link/api/src/infrastructure"
-	"sakaba.link/api/src/middleware"
-	"sakaba.link/api/src/repository"
+	"github.com/yumaeda/sakaba-api/src/controller"
+	"github.com/yumaeda/sakaba-api/src/infrastructure"
+	"github.com/yumaeda/sakaba-api/src/middleware"
+	"github.com/yumaeda/sakaba-api/src/repository"
 )
 
 var realm = "Sakaba Link Zone"

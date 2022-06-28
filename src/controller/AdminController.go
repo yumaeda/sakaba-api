@@ -5,7 +5,7 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	"sakaba.link/api/src/model"
+	"github.com/yumaeda/sakaba-api/src/model"
 )
 
 var identityKey = "id"

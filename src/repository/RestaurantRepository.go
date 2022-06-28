@@ -2,9 +2,9 @@ package repository
 
 import (
 	"github.com/google/uuid"
+	"github.com/yumaeda/sakaba-api/src/infrastructure"
+	"github.com/yumaeda/sakaba-api/src/model"
 	"gorm.io/gorm"
-	"sakaba.link/api/src/infrastructure"
-	"sakaba.link/api/src/model"
 )
 
 // RestaurantRepository is responsible for reading from and writing to DB Table `restaurants`.
