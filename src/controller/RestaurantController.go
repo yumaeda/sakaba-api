@@ -29,6 +29,14 @@ func (c RestaurantController) GetOpenRestaurantsByGenreID(ctx *gin.Context) {
 	})
 }
 
+// GetRestaurantsByGenreID returns open restaurants for the specified genre.
+func (c RestaurantController) GetRestaurantsByGenreID(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"statusCode": 200,
+		"body":       c.Repository.GetRestaurantsByGenreID(ctx.Param("id"), ctx.Param("latitude"), ctx.Param("longitude")),
+	})
+}
+
 // GetOpenRestaurantsByDrinkID returns open restaurants for the specified drink.
 func (c RestaurantController) GetOpenRestaurantsByDrinkID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
