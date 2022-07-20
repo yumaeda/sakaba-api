@@ -127,6 +127,29 @@ func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []mode
 	return restaurants
 }
 
+// GetRestaurantsByDrinkID returns the open restaurants for the specified drink.
+func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string, latitude string, longitude string) []model.SimpleRestaurant {
+	restaurants := []model.SimpleRestaurant{}
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
+	               r.url,
+	               r.name,
+	               r.genre,
+	               r.tel,
+	               r.business_day_info,
+	               r.address,
+				GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
+	               r.area
+                  FROM restaurants AS r
+                  JOIN restaurant_drinks AS rd
+                    ON r.id = rd.restaurant_id
+		   AND rd.drink_id = ` + drinkID + `
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                 ORDER BY distance ASC`).Scan(&restaurants)
+
+	return restaurants
+}
+
 // GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
 func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
 	restaurants := []model.RestaurantView{}
@@ -155,6 +178,34 @@ func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                  ORDER BY rk.rank ASC`).Scan(&restaurants)
+
+	return restaurants
+}
+
+// GetRestaurantsByDishID returns the open restaurants which have the specified dish.
+func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude string, longitude string) []model.SimpleRestaurant {
+	restaurants := []model.SimpleRestaurant{}
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
+	               r.url,
+	               r.name,
+	               r.genre,
+	               r.tel,
+	               r.business_day_info,
+	               r.address,
+				GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
+	               r.area
+	          FROM dishes AS d
+	          JOIN rankings AS rk
+                    ON rk.dish_id = d.id
+                  JOIN photos AS p
+                    ON p.id = rk.photo_id
+                  JOIN restaurants AS r
+                    ON r.id = p.restaurant_id
+                 WHERE r.is_closed = 0
+                   AND d.id = ` + dishID + `
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                 ORDER BY distance ASC`).Scan(&restaurants)
 
 	return restaurants
 }
