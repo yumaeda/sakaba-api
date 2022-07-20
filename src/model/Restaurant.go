@@ -41,6 +41,8 @@ type SimpleRestaurant struct {
 	Tel             string  `json:"tel"`
 	BusinessDayInfo string  `json:"business_day_info"`
 	Address         string  `json:"address"`
+	Latitude        string  `json:"latitude"`
+	Longitude       string  `json:"longitude"`
 	Distance        float64 `json:"distance"`
 	Area            string  `json:"area"`
 }

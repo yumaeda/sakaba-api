@@ -82,6 +82,8 @@ func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string, latitude s
 	               r.tel,
 	               r.business_day_info,
 	               r.address,
+	               r.latitude,
+	               r.longitude,
 		       GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
 	               r.area
                   FROM restaurants AS r
@@ -137,6 +139,8 @@ func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string, latitude s
 	               r.tel,
 	               r.business_day_info,
 	               r.address,
+	               r.latitude,
+	               r.longitude,
 				GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
 	               r.area
                   FROM restaurants AS r
@@ -192,6 +196,8 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude str
 	               r.tel,
 	               r.business_day_info,
 	               r.address,
+	               r.latitude,
+	               r.longitude,
 				GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
 	               r.area
 	          FROM dishes AS d
