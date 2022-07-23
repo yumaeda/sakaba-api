@@ -41,6 +41,34 @@ func (c RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
 	return restaurants
 }
 
+// GetRestaurantsByArea returns restaurants for the specified area.
+func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string, longitude string) []model.SimpleRestaurant {
+	restaurants := []model.SimpleRestaurant{}
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
+	               r.url,
+	               r.name,
+	               r.genre,
+	               r.tel,
+	               r.business_day_info,
+	               r.address,
+	               r.latitude,
+	               r.longitude,
+		           GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
+	               r.area,
+	               COUNT(p.restaurant_id) AS photo_count
+                  FROM restaurants AS r
+                  LEFT JOIN photos AS p
+                    ON r.id = p.restaurant_id
+                 WHERE is_closed = 0
+		           AND r.area = '` + area + `'
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                 GROUP BY r.id
+                 ORDER BY photo_count DESC`).Scan(&restaurants)
+
+	return restaurants
+}
+
 // GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
 func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
 	restaurants := []model.RestaurantView{}
