@@ -52,7 +52,7 @@ func main() {
 	defer closer()
 
 	adminController := controller.AdminController{}
-	areaController := controller.AreaController{}
+	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: db}}
 	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{DB: db}}
 	dishController := controller.DishController{Repository: repository.DishRepository{DB: db}}
 	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: db}}
