@@ -1,6 +1,6 @@
 FROM golang:alpine AS builder
 
-RUN apk add --no-cache upx && apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates
 
 ENV GIN_MODE=release
 ENV PORT=8080
@@ -11,9 +11,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY src ./src
 
-RUN CGO_ENABLED=0 go build -ldflags "-s -w" -tags=nomsgpack -o server ./src/main.go && \
-    upx --best server -o _upx_server && \
-    mv -f _upx_server server
+RUN CGO_ENABLED=0 go build -ldflags "-s -w" -tags=nomsgpack -o server ./src/main.go
 
 EXPOSE $PORT
 
