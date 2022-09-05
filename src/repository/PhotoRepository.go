@@ -27,6 +27,23 @@ func (c PhotoRepository) GetAllPhotos() []model.PhotoView {
 	return allPhotos
 }
 
+// GetLatestPhotos returns all the photos.
+func (c PhotoRepository) GetLatestPhotos() []model.PhotoView {
+	photos := []model.PhotoView{}
+	c.DB.Raw(`SELECT UuidFromBin(r.id) AS restaurant_id,
+                     CONCAT(p.name, '.jpg') AS image,
+                     CONCAT(p.name, '.webp') AS image_webp,
+                     CONCAT(p.name, '_thumbnail.jpg') AS thumbnail,
+                     CONCAT(p.name, '_thumbnail.webp') AS thumbnail_webp
+                FROM photos AS p
+                JOIN restaurants AS r
+                  ON p.restaurant_id = r.id
+               ORDER BY p.create_time DESC
+               LIMIT 12`).Scan(&photos)
+
+	return photos
+}
+
 // AddPhoto adds meta data for the new photo.
 func (c PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
 	photo := model.Photo{

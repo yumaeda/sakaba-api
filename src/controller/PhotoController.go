@@ -25,6 +25,13 @@ func (c PhotoController) GetAllPhotos(ctx *gin.Context) {
 	})
 }
 
+// GetLatestPhotos returns latest photos.
+func (c PhotoController) GetLatestPhotos(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"body": c.Repository.GetLatestPhotos(),
+	})
+}
+
 // AddPhoto uploads the specified photo to the specified restaurant.
 func (c PhotoController) AddPhoto(ctx *gin.Context) {
 	var errorMessage string
