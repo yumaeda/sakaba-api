@@ -39,7 +39,7 @@ func (c PhotoRepository) GetLatestPhotos() []model.PhotoView {
                 JOIN restaurants AS r
                   ON p.restaurant_id = r.id
                ORDER BY p.create_time DESC
-               LIMIT 12`).Scan(&photos)
+               LIMIT 16`).Scan(&photos)
 
 	return photos
 }
