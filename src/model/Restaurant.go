@@ -45,4 +45,5 @@ type SimpleRestaurant struct {
 	Longitude       string  `json:"longitude"`
 	Distance        float64 `json:"distance"`
 	Area            string  `json:"area"`
+	IsOpen          int     `json:"is_open"`
 }
