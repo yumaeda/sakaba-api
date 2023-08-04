@@ -58,6 +58,7 @@ func main() {
 	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: db}}
 	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: db}}
 	healtchCheckController := controller.HealthCheckController{}
+	menuController := controller.MenuController{Repository: repository.MenuRepository{DB: db}}
 	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: db}}
 	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: db}}
 	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: db}}
@@ -77,6 +78,7 @@ func main() {
 	router.GET("/health/", healtchCheckController.GetStatus)
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
+	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
 	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
 	router.GET("/restaurants/areas/:id/:latitude/:longitude", restaurantController.GetRestaurantsByArea)
 	router.GET("/restaurants/dishes/:id/:latitude/:longitude", restaurantController.GetRestaurantsByDishID)
