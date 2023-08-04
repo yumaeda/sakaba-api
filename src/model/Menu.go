@@ -1,14 +1,13 @@
 package model
 
-// Mneu is an entity for Menu API.
+// Menu is an entity for Menu API.
 type Menu struct {
-	ID          int    `json:"id"`
 	SortOrder   int    `json:"sort_order"`
+	Category    int    `json:"category"`
+	SubCategory int    `json:"sub_category"`
+	Region      int    `json:"region"`
 	Name        string `json:"name"`
 	NameJpn     string `json:"name_jpn"`
-	Category    string `json:"category"`
-	SubCategory string `json:"sub_category"`
-	Region      string `json:"region"`
 	Price       int    `json:"price"`
-	isMinPrice  bool   `json:"is_min_price"`
+	isMinPrice  int    `json:"is_min_price"`
 }
