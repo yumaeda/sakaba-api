@@ -20,7 +20,7 @@ var secretKey = "testKey"
 func main() {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:  []string{"https://sakaba.link", "http://www.baroceans.com"},
+		AllowOrigins:  []string{"https://sakaba.link", "https://admin.sakaba.link", "http://www.baroceans.com"},
 		AllowMethods:  []string{"GET", "POST"},
 		AllowHeaders:  []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders: []string{"Content-Length"},
