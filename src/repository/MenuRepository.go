@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/yumaeda/sakaba-api/src/infrastructure"
 	"github.com/yumaeda/sakaba-api/src/model"
 	"gorm.io/gorm"
 )
@@ -24,7 +23,7 @@ func (c MenuRepository) GetMenus(restaurantID string) []model.Menu {
 					 price,
 					 is_min_price
 				FROM menus
-			   WHERE restaurant_id = ` + infrastructure.UUIDToBin(restaurantID) + `
+			   WHERE UuidFromBin(restaurant_id) = '` + restaurantID + `'
 			   ORDER BY category ASC, sub_category ASC, region ASC, sort_order ASC`).Scan(&menus)
 
 	return menus
