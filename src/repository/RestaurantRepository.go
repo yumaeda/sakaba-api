@@ -24,7 +24,7 @@ func (c RestaurantRepository) GetRestaurants() []model.Restaurant {
 	                 address,
 	                 latitude,
 	                 longitude,
-	                 area,
+	                 area
                 FROM restaurants
                WHERE is_closed = 0
                ORDER BY area ASC, name ASC`).Scan(&restaurants)
@@ -55,7 +55,7 @@ func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string,
                   FROM restaurants AS r
                   LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
-                 WHERE is_closed = 0
+                 WHERE r.is_closed = 0
 		           AND r.area = '` + area + `'
                  GROUP BY r.id
                  ORDER BY photo_count DESC`).Scan(&restaurants)
@@ -84,7 +84,7 @@ func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mode
                     ON r.id = rg.restaurant_id
                   LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
-                 WHERE is_closed = 0
+                 WHERE r.is_closed = 0
 		   AND rg.genre_id = ` + genreID + `
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
@@ -116,7 +116,7 @@ func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string, latitude s
                   FROM restaurants AS r
                   JOIN restaurant_genres AS rg
                     ON r.id = rg.restaurant_id
-                 WHERE is_closed = 0
+                 WHERE r.is_closed = 0
 		   AND rg.genre_id = ` + genreID + `
                  ORDER BY distance ASC`).Scan(&restaurants)
 
@@ -144,7 +144,7 @@ func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []mode
                     ON r.id = rd.restaurant_id
                   LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
-                 WHERE is_closed = 0
+                 WHERE r.is_closed = 0
 		   AND rd.drink_id = ` + drinkID + `
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                    AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
