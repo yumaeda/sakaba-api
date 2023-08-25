@@ -13,11 +13,11 @@ type RestaurantController struct {
 	Repository repository.RestaurantRepository
 }
 
-// GetOpenRestaurants returns open restaurants.
-func (c RestaurantController) GetOpenRestaurants(ctx *gin.Context) {
+// GetRestaurants returns all the restaurants.
+func (c RestaurantController) GetRestaurants(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetOpenRestaurants(),
+		"body":       c.Repository.GetRestaurants(),
 	})
 }
 

@@ -12,31 +12,22 @@ type RestaurantRepository struct {
 	DB *gorm.DB
 }
 
-// GetOpenRestaurants returns open restaurants.
-func (c RestaurantRepository) GetOpenRestaurants() []model.RestaurantView {
-	restaurants := []model.RestaurantView{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
-	               r.url,
-	               r.image_name,
-	               r.name,
-	               r.genre,
-	               r.tel,
-	               r.business_day_info,
-	               r.address,
-	               r.latitude,
-	               r.longitude,
-	               r.area,
-	               r.comment,
-	               r.takeout_available,
-	               COUNT(p.restaurant_id) AS photo_count
-                  FROM restaurants AS r
-                  LEFT JOIN photos AS p
-                    ON r.id = p.restaurant_id
-                 WHERE is_closed = 0
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                 GROUP BY r.id
-                 ORDER BY photo_count DESC`).Scan(&restaurants)
+// GetRestaurants returns all the restaurants.
+func (c RestaurantRepository) GetRestaurants() []model.Restaurant {
+	restaurants := []model.Restaurant{}
+	c.DB.Raw(`SELECT UuidFromBin(id) AS id,
+	                 url,
+	                 name,
+	                 genre,
+	                 tel,
+	                 business_day_info,
+	                 address,
+	                 latitude,
+	                 longitude,
+	                 area,
+                FROM restaurants
+               WHERE is_closed = 0
+               ORDER BY area ASC, name ASC`).Scan(&restaurants)
 
 	return restaurants
 }

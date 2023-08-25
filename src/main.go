@@ -79,7 +79,7 @@ func main() {
 	router.GET("/photos/", photoController.GetAllPhotos)
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
 	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
-	router.GET("/restaurants/", restaurantController.GetOpenRestaurants)
+	router.GET("/restaurants/", restaurantController.GetRestaurants)
 	router.GET("/restaurants/areas/:id/:latitude/:longitude", restaurantController.GetRestaurantsByArea)
 	router.GET("/restaurants/dishes/:id/:latitude/:longitude", restaurantController.GetRestaurantsByDishID)
 	router.GET("/restaurants/dishes/:id", restaurantController.GetOpenRestaurantsByDishID)
