@@ -251,6 +251,7 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude str
 func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
 	restaurantCounts := []model.RestaurantCount{}
 	c.DB.Raw(`SELECT a.value AS area,
+	                 a.name AS name,
                      SUM(
                          REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                          AND
