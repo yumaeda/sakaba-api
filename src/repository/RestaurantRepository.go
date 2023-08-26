@@ -260,8 +260,8 @@ func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
                RIGHT JOIN restaurants AS r
                   ON a.value = r.area
                WHERE r.is_closed = 0
-               GROUP BY a.value
-               ORDER BY open_count DESC`).Scan(&restaurantCounts)
+               GROUP BY area
+               ORDER BY count DESC`).Scan(&restaurantCounts)
 
 	return restaurantCounts
 }
