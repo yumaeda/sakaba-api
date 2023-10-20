@@ -87,7 +87,7 @@ func main() {
 	router.GET("/restaurants/drinks/:id", restaurantController.GetOpenRestaurantsByDrinkID)
 	router.GET("/restaurants/genres/:id/:latitude/:longitude", restaurantController.GetRestaurantsByGenreID)
 	router.GET("/restaurants/genres/:id", restaurantController.GetOpenRestaurantsByGenreID)
-	router.GET("/restaurant-counts/", restaurantController.GetOpenRestaurantCount)
+	router.GET("/restaurant-counts/:latitude/:longitude", restaurantController.GetOpenRestaurantCount)
 	router.GET("/rankings/", rankingController.GetAllRankings)
 	router.GET("/videos/", videoController.GetAllVideos)
 	router.GET("/videos/:id", videoController.GetVideosByRestaurantID)

@@ -247,8 +247,8 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude str
 	return restaurants
 }
 
-// GetOpenRestaurantCount returns the number of open restaurants.
-func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
+// GetOpenRestaurantCount returns the number of open restaurants within 5km.
+func (c RestaurantRepository) GetOpenRestaurantCount(latitude string, longitude string) []model.RestaurantCount {
 	restaurantCounts := []model.RestaurantCount{}
 	c.DB.Raw(`SELECT a.value AS area,
 	                 a.name AS name,
@@ -261,6 +261,7 @@ func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
                RIGHT JOIN restaurants AS r
                   ON a.value = r.area
                WHERE r.is_closed = 0
+				 AND (GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) < 5)
                GROUP BY area
                ORDER BY count DESC`).Scan(&restaurantCounts)
 
