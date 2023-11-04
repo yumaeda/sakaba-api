@@ -73,7 +73,7 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 		SendCookie:     true,
 		SecureCookie:   true,
 		CookieHTTPOnly: true,
-		CookieDomain:   "sakaba.link",
+		CookieDomain:   "sakabas.com",
 		CookieSameSite: http.SameSiteDefaultMode,
 	})
 }
