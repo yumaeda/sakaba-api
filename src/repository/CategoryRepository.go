@@ -18,7 +18,7 @@ func (c CategoryRepository) GetCategories(restaurantID string) []model.Category 
 		Select("id", "parent_id", "name").
 		Where("restaurant_id = ?", infrastructure.UUIDToBin(restaurantID)).
 		Order("parent_id ASC").
-		Order("id ASC").
+		Order("sort_order ASC").
 		Scan(&categories)
 
 	return categories
