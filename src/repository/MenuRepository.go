@@ -23,7 +23,8 @@ func (c MenuRepository) GetMenus(restaurantID string) []model.Menu {
 					 price,
 					 is_min_price
 				FROM menus
-			   WHERE UuidFromBin(restaurant_id) = '` + restaurantID + `'
+			   WHERE is_hidden = 0
+			     AND UuidFromBin(restaurant_id) = '` + restaurantID + `'
 			   ORDER BY category ASC, sub_category ASC, region ASC, sort_order ASC`).Scan(&menus)
 
 	return menus
