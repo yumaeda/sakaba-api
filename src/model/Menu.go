@@ -11,4 +11,5 @@ type Menu struct {
 	NameJpn     string `json:"name_jpn"`
 	Price       int    `json:"price"`
 	isMinPrice  int    `json:"is_min_price"`
+	isHidden    int    `json:"is_hidden"`
 }
