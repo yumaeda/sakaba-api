@@ -1,0 +1,32 @@
+name: Push Docker image
+
+on:
+  push:
+    branches: [ main ]
+env:
+  REGION: us-central1
+  REPOSITORY: sakabas-api
+  IMG_NAME: sakabas-api
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Authenticate GCP'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+      - name: 'Setup Google Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+
+      - name: 'Authenticate Request to Artifact Registry'
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: 'Build and push Docker image'
+        run: |
+          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMG_NAME }}:latest .
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMG_NAME }}:latest
