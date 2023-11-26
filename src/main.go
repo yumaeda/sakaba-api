@@ -76,7 +76,7 @@ func main() {
 	router.GET("/genres/", genreController.GetAllGenres)
 	router.GET("/genres/:id", genreController.GetGenreByID)
 	router.GET("/health/", healtchCheckController.GetStatus)
-	router.GET("/photos/", photoController.GetAllPhotos)
+	router.GET("/photos/:id", photoController.GetPhotosByRestaurantID)
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
 	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
 	router.GET("/restaurants/", restaurantController.GetRestaurants)

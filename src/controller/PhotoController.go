@@ -17,11 +17,13 @@ type PhotoController struct {
 	Repository repository.PhotoRepository
 }
 
-// GetAllPhotos returns all the photos.
-func (c PhotoController) GetAllPhotos(ctx *gin.Context) {
+// GetPhotosByRestaurantID returns all the photos for the specified restaurant.
+func (c PhotoController) GetPhotosByRestaurantID(ctx *gin.Context) {
+	photos := c.Repository.GetPhotosByRestaurantID(ctx.Param("id"))
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetAllPhotos(),
+		"body":       photos,
 	})
 }
 

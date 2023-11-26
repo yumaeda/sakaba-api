@@ -11,35 +11,30 @@ type PhotoRepository struct {
 	DB *gorm.DB
 }
 
-// GetAllPhotos returns all the photos.
-func (c PhotoRepository) GetAllPhotos() []model.PhotoView {
-	allPhotos := []model.PhotoView{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS restaurant_id,
-                       CONCAT(p.name, '.jpg') AS image,
-                       CONCAT(p.name, '.webp') AS image_webp,
-                       CONCAT(p.name, '_thumbnail.jpg') AS thumbnail,
-                       CONCAT(p.name, '_thumbnail.webp') AS thumbnail_webp
-                  FROM photos AS p
-                  JOIN restaurants AS r
-                    ON p.restaurant_id = r.id
-                 ORDER BY p.create_time DESC`).Scan(&allPhotos)
+// GetPhotosByRestaurantID returns all the photos for the specified restaurant.
+func (c PhotoRepository) GetPhotosByRestaurantID(restaurantID string) []model.PhotoView {
+	photos := []model.PhotoView{}
+	c.DB.Raw(`SELECT CONCAT(name, '.jpg') AS image,
+                     CONCAT(name, '.webp') AS image_webp,
+                     CONCAT(name, '_thumbnail.jpg') AS thumbnail,
+                     CONCAT(name, '_thumbnail.webp') AS thumbnail_webp
+                FROM photos
+   		       WHERE UuidFromBin(restaurant_id) = '` + restaurantID + `'
+               ORDER BY create_time DESC`).Scan(&photos)
 
-	return allPhotos
+	return photos
 }
 
 // GetLatestPhotos returns all the photos.
 func (c PhotoRepository) GetLatestPhotos() []model.PhotoView {
 	photos := []model.PhotoView{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS restaurant_id,
-                     CONCAT(p.name, '.jpg') AS image,
-                     CONCAT(p.name, '.webp') AS image_webp,
-                     CONCAT(p.name, '_thumbnail.jpg') AS thumbnail,
-                     CONCAT(p.name, '_thumbnail.webp') AS thumbnail_webp
-                FROM photos AS p
-                JOIN restaurants AS r
-                  ON p.restaurant_id = r.id
-               ORDER BY p.create_time DESC
-               LIMIT 16`).Scan(&photos)
+	c.DB.Raw(`SELECT CONCAT(name, '.jpg') AS image,
+                     CONCAT(name, '.webp') AS image_webp,
+                     CONCAT(name, '_thumbnail.jpg') AS thumbnail,
+                     CONCAT(name, '_thumbnail.webp') AS thumbnail_webp
+                FROM photos
+               ORDER BY create_time DESC
+               LIMIT 20`).Scan(&photos)
 
 	return photos
 }
