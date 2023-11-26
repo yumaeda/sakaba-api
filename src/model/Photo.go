@@ -2,6 +2,7 @@ package model
 
 // PhotoView is a readonly entity for Photo API.
 type PhotoView struct {
+	RestaurantID  string `json:"restaurant_id"`
 	Name          string `json:"name"`
 	Image         string `json:"image"`
 	ImageWebp     string `json:"image_webp"`
