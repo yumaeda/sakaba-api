@@ -12,10 +12,15 @@ import (
 // S3Service handle AWS S3 operations.
 type S3Service struct{}
 
+var awsSession *s3.S3
+
 // Upload uploads the file to AWS S3.
 func (c *S3Service) Upload(restaurantID string, fileName string, file []byte) error {
+	if awsSession == nil {
+		awsSession = infrastructure.ConnectToAws()
+	}
+
 	s3Bucket := "admin.tokyo-takeout.com"
-	awsSession := infrastructure.ConnectToAws()
 	objectKey := fmt.Sprintf("images/restaurants/%s/%s.jpeg", restaurantID, fileName)
 	uploadParams := &s3.PutObjectInput{
 		Bucket: aws.String(s3Bucket),
