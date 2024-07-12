@@ -56,7 +56,7 @@ func ConnectToTiDB() (*gorm.DB, func(), error) {
 	json.Unmarshal([]byte(secretManagerJSON), &dbConfig)
 
 	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		"%s:%s@tcp(%s:4000)/%s?tls=tidb",
 		dbConfig.User,
 		dbConfig.Password,
 		dbConfig.Host,
