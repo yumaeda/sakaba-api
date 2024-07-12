@@ -18,15 +18,6 @@ type DatabaseConfig struct {
 	User     string `json:"db.user"`
 }
 
-// TiDBConfig is a configuration of the TiDB connection.
-type TiDBConfig struct {
-	Password string `json:"tidb.password"`
-	Host     string `json:"tidb.host"`
-	Name     string `json:"tidb.name"`
-	User     string `json:"tidb.user"`
-	Port     string `json:"tidb.port"`
-}
-
 // ConnectToDB connects to the Database based on the configuration and returns pointer to the connection.
 func ConnectToDB() (*gorm.DB, func(), error) {
 	secretManagerJSON := os.Getenv("APP_CONFIG_JSON")
@@ -61,7 +52,7 @@ func ConnectToDB() (*gorm.DB, func(), error) {
 // ConnectToTiDB connects to the TiDB based on the configuration and returns pointer to the connection.
 func ConnectToTiDB() (*gorm.DB, func(), error) {
 	secretManagerJSON := os.Getenv("TIDB_CONFIG_JSON")
-	dbConfig := TiDBConfig{}
+	dbConfig := DatabaseConfig{}
 	json.Unmarshal([]byte(secretManagerJSON), &dbConfig)
 
 	dsn := fmt.Sprintf(
