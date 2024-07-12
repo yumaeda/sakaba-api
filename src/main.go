@@ -51,8 +51,14 @@ func main() {
 	}
 	defer closer()
 
+	tidb, tidbCloser, tidbErr := infrastructure.ConnectToTiDB()
+	if tidbErr != nil {
+		panic(tidbErr.Error())
+	}
+	defer tidbCloser()
+
 	adminController := controller.AdminController{}
-	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: db}}
+	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: tidb}}
 	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{DB: db}}
 	dishController := controller.DishController{Repository: repository.DishRepository{DB: db}}
 	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: db}}
