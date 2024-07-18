@@ -21,7 +21,7 @@ func (c VideoRepository) GetAllVideos() []model.Video {
 
 // GetVideosByRestaurantID returns videos for the specified restaurant.
 func (c VideoRepository) GetVideosByRestaurantID(id string) []model.SimpleVideo {
-	restaurantID := infrastructure.UUIDToBin(id)
+	restaurantID := infrastructure.UUIDToBinForTiDB(id)
 	videos := []model.SimpleVideo{}
 	c.DB.Table("videos").Select("name", "url").Where("restaurant_id = ?", restaurantID).Scan(&videos)
 

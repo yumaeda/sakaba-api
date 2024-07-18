@@ -103,3 +103,27 @@ func UUIDToBin(uuid string) string {
 
 	return bin
 }
+
+// UUIDToBinForTiDB converts UUID to Binary format.
+func UUIDToBinForTiDB(uuid string) string {
+	db, closer, err := ConnectToDB()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer closer()
+
+	rows, err := db.Raw("SELECT UUID_TO_BIN('" + uuid + "', 1)").Rows()
+	if err != nil {
+		panic(err.Error())
+	}
+	defer rows.Close()
+
+	var bin string
+	for rows.Next() {
+		if err := rows.Scan(&bin); err != nil {
+			panic("Error occurrs while retrieving a value")
+		}
+	}
+
+	return bin
+}
