@@ -60,7 +60,7 @@ func main() {
 	adminController := controller.AdminController{}
 	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: tidb}}
 	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{DB: db}}
-	dishController := controller.DishController{Repository: repository.DishRepository{DB: db}}
+	dishController := controller.DishController{Repository: repository.DishRepository{DB: tidb}}
 	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: tidb}}
 	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: tidb}}
 	healtchCheckController := controller.HealthCheckController{}
