@@ -14,7 +14,7 @@ type VideoRepository struct {
 // GetAllVideos returns all the videos.
 func (c VideoRepository) GetAllVideos() []model.Video {
 	allVideos := []model.Video{}
-	c.DB.Raw("SELECT id, UuidFromBin(restaurant_id) AS restaurant_id, name, url FROM videos ORDER BY name").Scan(&allVideos)
+	c.DB.Raw("SELECT id, BIN_TO_UUID(restaurant_id, 1) AS restaurant_id, name, url FROM videos ORDER BY name").Scan(&allVideos)
 
 	return allVideos
 }
