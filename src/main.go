@@ -70,7 +70,7 @@ func main() {
 	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: tidb}}
 	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{DB: db}}
 	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{DB: tidb}}
-	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: db}}
+	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: tidb}}
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/areas/", areaController.GetAllAreas)
