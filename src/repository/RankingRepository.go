@@ -14,19 +14,19 @@ type RankingRepository struct {
 func (c RankingRepository) GetAllRankings() []model.Ranking {
 	allRankings := []model.Ranking{}
 	c.DB.Raw(`SELECT dishes.name AS 'dish',
-	               rankings.rank AS 'rank',
-	               restaurants.name AS 'restaurant',
-	               UuidFromBin(restaurants.id) AS 'restaurant_id',
-	               photos.name AS 'photo',
-	               restaurants.url AS 'restaurant_url'
-                  FROM rankings
-                  JOIN dishes
-                    ON rankings.dish_id = dishes.id
-                  JOIN photos
-                    ON rankings.photo_id = photos.id
-                  JOIN restaurants
-                    ON photos.restaurant_id = restaurants.id
-                 ORDER BY dishes.name ASC, rankings.rank ASC`).Scan(&allRankings)
+                   rankings.rank AS 'rank',
+                   restaurants.name AS 'restaurant',
+                   BIN_TO_UUID(restaurants.id, 1) AS 'restaurant_id',
+                   photos.name AS 'photo',
+                   restaurants.url AS 'restaurant_url'
+              FROM rankings
+              JOIN dishes
+                ON rankings.dish_id = dishes.id
+              JOIN photos
+                ON rankings.photo_id = photos.id
+              JOIN restaurants
+                ON photos.restaurant_id = restaurants.id
+             ORDER BY dishes.name ASC, rankings.rank ASC`).Scan(&allRankings)
 
 	return allRankings
 }
