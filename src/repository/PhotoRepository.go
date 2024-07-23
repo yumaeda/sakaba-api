@@ -19,7 +19,7 @@ func (c PhotoRepository) GetPhotosByRestaurantID(restaurantID string) []model.Ph
                      CONCAT(name, '_thumbnail.jpg') AS thumbnail,
                      CONCAT(name, '_thumbnail.webp') AS thumbnail_webp
                 FROM photos
-               WHERE BIN_TO_UUID(restaurant_id) = '` + restaurantID + `'
+               WHERE BIN_TO_UUID(restaurant_id, 1) = '` + restaurantID + `'
                ORDER BY create_time DESC`).Scan(&photos)
 
 	return photos
@@ -28,7 +28,7 @@ func (c PhotoRepository) GetPhotosByRestaurantID(restaurantID string) []model.Ph
 // GetLatestPhotos returns all the photos.
 func (c PhotoRepository) GetLatestPhotos() []model.PhotoView {
 	photos := []model.PhotoView{}
-	c.DB.Raw(`SELECT BIN_TO_UUID(restaurant_id) AS restaurant_id,
+	c.DB.Raw(`SELECT BIN_TO_UUID(restaurant_id, 1) AS restaurant_id,
 	                 CONCAT(name, '.jpg') AS image,
                      CONCAT(name, '.webp') AS image_webp,
                      CONCAT(name, '_thumbnail.jpg') AS thumbnail,
