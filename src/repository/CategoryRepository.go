@@ -16,7 +16,7 @@ func (c CategoryRepository) GetCategories(restaurantID string) []model.Category 
 	categories := []model.Category{}
 	c.DB.Table("categories").
 		Select("id", "parent_id", "name").
-		Where("restaurant_id = ?", infrastructure.UUIDToBin(restaurantID)).
+		Where("restaurant_id = ?", infrastructure.UUIDToBinForTiDB(restaurantID)).
 		Order("parent_id ASC").
 		Order("sort_order ASC").
 		Scan(&categories)
