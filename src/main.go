@@ -68,7 +68,7 @@ func main() {
 	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: tidb}}
 	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: tidb}}
 	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: tidb}}
-	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{DB: db}}
+	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{DB: db, TiDB: tidb}}
 	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{DB: tidb}}
 	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: tidb}}
 
