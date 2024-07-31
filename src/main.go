@@ -68,7 +68,7 @@ func main() {
 	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: tidb}}
 	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: tidb}}
 	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: tidb}}
-	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{DB: db, TiDB: tidb}}
+	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{TiDB: tidb}}
 	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{DB: tidb}}
 	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: tidb}}
 
@@ -86,14 +86,11 @@ func main() {
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
 	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
 	router.GET("/restaurants/", restaurantController.GetRestaurants)
-	router.GET("/restaurants/areas/:id/:latitude/:longitude", restaurantController.GetRestaurantsByArea)
-	router.GET("/restaurants/dishes/:id/:latitude/:longitude", restaurantController.GetRestaurantsByDishID)
-	router.GET("/restaurants/dishes/:id", restaurantController.GetOpenRestaurantsByDishID)
-	router.GET("/restaurants/drinks/:id/:latitude/:longitude", restaurantController.GetRestaurantsByDrinkID)
-	router.GET("/restaurants/drinks/:id", restaurantController.GetOpenRestaurantsByDrinkID)
-	router.GET("/restaurants/genres/:id/:latitude/:longitude", restaurantController.GetRestaurantsByGenreID)
-	router.GET("/restaurants/genres/:id", restaurantController.GetOpenRestaurantsByGenreID)
-	router.GET("/restaurant-counts/:latitude/:longitude", restaurantController.GetOpenRestaurantCount)
+	router.GET("/restaurants/areas/:id", restaurantController.GetRestaurantsByArea)
+	router.GET("/restaurants/dishes/:id", restaurantController.GetRestaurantsByDishID)
+	router.GET("/restaurants/drinks/:id", restaurantController.GetRestaurantsByDrinkID)
+	router.GET("/restaurants/genres/:id", restaurantController.GetRestaurantsByGenreID)
+	router.GET("/restaurant-counts/", restaurantController.GetOpenRestaurantCount)
 	router.GET("/rankings/", rankingController.GetAllRankings)
 	router.GET("/videos/", videoController.GetAllVideos)
 	router.GET("/videos/:id", videoController.GetVideosByRestaurantID)

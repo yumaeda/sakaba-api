@@ -9,7 +9,6 @@ import (
 
 // RestaurantRepository is responsible for reading from and writing to DB Table `restaurants`.
 type RestaurantRepository struct {
-	DB   *gorm.DB
 	TiDB *gorm.DB
 }
 
@@ -34,9 +33,9 @@ func (c RestaurantRepository) GetRestaurants() []model.Restaurant {
 }
 
 // GetRestaurantsByArea returns restaurants for the specified area.
-func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string, longitude string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByArea(area string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
+	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
 	               r.name,
 	               r.genre,
@@ -45,13 +44,12 @@ func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string,
 	               r.address,
 	               r.latitude,
 	               r.longitude,
-		           GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
 	               r.area,
 	               COUNT(p.restaurant_id) AS photo_count,
                    (
-				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                            AND
-					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
 				   ) AS is_open
                   FROM restaurants AS r
                   LEFT JOIN photos AS p
@@ -64,9 +62,9 @@ func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string,
 	return restaurants
 }
 
-// GetOpenRestaurantsByGenreID returns the open restaurants for the specified genre.
-func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []model.RestaurantView {
-	restaurants := []model.RestaurantView{}
+// GetRestaurantsByGenreID returns the open restaurants for the specified genre.
+func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string) []model.SimpleRestaurant {
+	restaurants := []model.SimpleRestaurant{}
 	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
 	               r.name,
@@ -77,78 +75,19 @@ func (c RestaurantRepository) GetOpenRestaurantsByGenreID(genreID string) []mode
 	               r.latitude,
 	               r.longitude,
 	               r.area,
-	               r.comment,
-	               r.takeout_available,
-	               COUNT(p.restaurant_id) AS photo_count
-                  FROM restaurants AS r
-                  JOIN restaurant_genres AS rg
-                    ON r.id = rg.restaurant_id
-                  LEFT JOIN photos AS p
-                    ON r.id = p.restaurant_id
-                 WHERE r.is_closed = 0
-		   AND rg.genre_id = ` + genreID + `
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                 GROUP BY r.id
-                 ORDER BY photo_count DESC`).Scan(&restaurants)
-
-	return restaurants
-}
-
-// GetRestaurantsByGenreID returns the open restaurants for the specified genre.
-func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string, latitude string, longitude string) []model.SimpleRestaurant {
-	restaurants := []model.SimpleRestaurant{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
-	               r.url,
-	               r.name,
-	               r.genre,
-	               r.tel,
-	               r.business_day_info,
-	               r.address,
-	               r.latitude,
-	               r.longitude,
-		       GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
-	               r.area,
+	               COUNT(p.restaurant_id) AS photo_count,
                    (
-				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                            AND
-					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
 				   ) AS is_open
                   FROM restaurants AS r
                   JOIN restaurant_genres AS rg
                     ON r.id = rg.restaurant_id
-                 WHERE r.is_closed = 0
-		   AND rg.genre_id = ` + genreID + `
-                 ORDER BY distance ASC`).Scan(&restaurants)
-
-	return restaurants
-}
-
-// GetOpenRestaurantsByDrinkID returns the open restaurants for the specified drink.
-func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []model.RestaurantView {
-	restaurants := []model.RestaurantView{}
-	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
-	               r.url,
-	               r.name,
-	               r.genre,
-	               r.tel,
-	               r.business_day_info,
-	               r.address,
-	               r.latitude,
-	               r.longitude,
-	               r.area,
-	               r.comment,
-	               r.takeout_available,
-	               COUNT(p.restaurant_id) AS photo_count
-                  FROM restaurants AS r
-                  JOIN restaurant_drinks AS rd
-                    ON r.id = rd.restaurant_id
                   LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
                  WHERE r.is_closed = 0
-		   AND rd.drink_id = ` + drinkID + `
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                   AND rg.genre_id = ` + genreID + `
                  GROUP BY r.id
                  ORDER BY photo_count DESC`).Scan(&restaurants)
 
@@ -156,36 +95,8 @@ func (c RestaurantRepository) GetOpenRestaurantsByDrinkID(drinkID string) []mode
 }
 
 // GetRestaurantsByDrinkID returns the open restaurants for the specified drink.
-func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string, latitude string, longitude string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
-	               r.url,
-	               r.name,
-	               r.genre,
-	               r.tel,
-	               r.business_day_info,
-	               r.address,
-	               r.latitude,
-	               r.longitude,
-				GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
-	               r.area,
-                   (
-				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                           AND
-					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-				   ) AS is_open
-                  FROM restaurants AS r
-                  JOIN restaurant_drinks AS rd
-                    ON r.id = rd.restaurant_id
-		   AND rd.drink_id = ` + drinkID + `
-                 ORDER BY distance ASC`).Scan(&restaurants)
-
-	return restaurants
-}
-
-// GetOpenRestaurantsByDishID returns the open restaurants which have the specified dish.
-func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.RestaurantView {
-	restaurants := []model.RestaurantView{}
 	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
 	               r.name,
@@ -196,29 +107,28 @@ func (c RestaurantRepository) GetOpenRestaurantsByDishID(dishID string) []model.
 	               r.latitude,
 	               r.longitude,
 	               r.area,
-	               r.comment,
-	               r.takeout_available,
-	               0 AS photo_count
-	          FROM dishes AS d
-	          JOIN rankings AS rk
-                    ON rk.dish_id = d.id
-                  JOIN photos AS p
-                    ON p.id = rk.photo_id
-                  JOIN restaurants AS r
+	               COUNT(p.restaurant_id) AS photo_count,
+                   (
+				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                           AND
+					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+				   ) AS is_open
+                  FROM restaurants AS r
+                  JOIN restaurant_drinks AS rd
+                    ON r.id = rd.restaurant_id
+                  LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
-                 WHERE r.is_closed = 0
-                   AND d.id = ` + dishID + `
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                   AND REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                 ORDER BY rk.rank ASC`).Scan(&restaurants)
+		   AND rd.drink_id = ` + drinkID + `
+                 GROUP BY r.id
+                 ORDER BY photo_count DESC`).Scan(&restaurants)
 
 	return restaurants
 }
 
 // GetRestaurantsByDishID returns the open restaurants which have the specified dish.
-func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude string, longitude string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByDishID(dishID string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
-	c.DB.Raw(`SELECT UuidFromBin(r.id) AS id,
+	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
 	               r.name,
 	               r.genre,
@@ -227,15 +137,15 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude str
 	               r.address,
 	               r.latitude,
 	               r.longitude,
-				GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) AS distance,
 	               r.area,
+	               COUNT(p.restaurant_id) AS photo_count,
                    (
-				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+				       REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                            AND
-					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
 				   ) AS is_open
-	          FROM dishes AS d
-	          JOIN rankings AS rk
+	              FROM dishes AS d
+				  JOIN rankings AS rk
                     ON rk.dish_id = d.id
                   JOIN photos AS p
                     ON p.id = rk.photo_id
@@ -243,28 +153,28 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude str
                     ON r.id = p.restaurant_id
                  WHERE r.is_closed = 0
                    AND d.id = ` + dishID + `
-                 ORDER BY distance ASC`).Scan(&restaurants)
+                 GROUP BY r.id
+                 ORDER BY photo_count DESC`).Scan(&restaurants)
 
 	return restaurants
 }
 
 // GetOpenRestaurantCount returns the number of open restaurants within 3km.
-func (c RestaurantRepository) GetOpenRestaurantCount(latitude string, longitude string) []model.RestaurantCount {
+func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
 	restaurantCounts := []model.RestaurantCount{}
-	c.DB.Raw(`SELECT a.value AS area,
-	                 a.name AS name,
-                     SUM(
-                         REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".Start")), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+	c.TiDB.Raw(`SELECT a.value AS area,
+	                   a.name AS name,
+                       SUM(
+                         REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".Start')), '"', '') <= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
                          AND
-                         REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$.', DAYOFWEEK(CURDATE()), ".End")), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
-                     ) AS count
-                FROM areas AS a
-               RIGHT JOIN restaurants AS r
-                  ON a.value = r.area
-               WHERE r.is_closed = 0
-				 AND (GetDistance(r.latitude, r.longitude, ` + latitude + `, ` + longitude + `) < 3)
-               GROUP BY area
-               ORDER BY count DESC`).Scan(&restaurantCounts)
+                         REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
+                       ) AS count
+                  FROM areas AS a
+                 RIGHT JOIN restaurants AS r
+                    ON a.value = r.area
+                 WHERE r.is_closed = 0
+                 GROUP BY a.value, a.name
+                 ORDER BY count DESC`).Scan(&restaurantCounts)
 
 	return restaurantCounts
 }
