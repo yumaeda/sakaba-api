@@ -106,7 +106,7 @@ func UUIDToBin(uuid string) string {
 
 // UUIDToBinForTiDB converts UUID to Binary format.
 func UUIDToBinForTiDB(uuid string) string {
-	db, closer, err := ConnectToDB()
+	db, closer, err := ConnectToTiDB()
 	if err != nil {
 		panic(err.Error())
 	}

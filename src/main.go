@@ -59,7 +59,7 @@ func main() {
 
 	adminController := controller.AdminController{}
 	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: tidb}}
-	cagegoyController := controller.CategoryController{Repository: repository.CategoryRepository{DB: db}}
+	categoryController := controller.CategoryController{Repository: repository.CategoryRepository{DB: tidb}}
 	dishController := controller.DishController{Repository: repository.DishRepository{DB: tidb}}
 	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: tidb}}
 	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: tidb}}
@@ -74,7 +74,7 @@ func main() {
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/areas/", areaController.GetAllAreas)
-	router.GET("/categories/:id", cagegoyController.GetCategoriesByRestaurantID)
+	router.GET("/categories/:id", categoryController.GetCategoriesByRestaurantID)
 	router.GET("/dishes/", dishController.GetAllDishes)
 	router.GET("/dishes/:id", dishController.GetDishByID)
 	router.GET("/drinks/", drinkController.GetAllDrinks)
