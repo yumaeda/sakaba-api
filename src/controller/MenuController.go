@@ -36,7 +36,7 @@ func (c MenuController) GetMenusByRestaurantIDFromTiDB(ctx *gin.Context) {
 // AddMenu adds a new menu.
 func (c MenuController) AddMenu(ctx *gin.Context) {
 	var json model.MenuNew
-	if err := ctx.BindJSON(&json); err != nil {
+	if err := ctx.ShouldBindJSON(&json); err == nil {
 		id, dbError := c.Repository.AddMenu(json.RestaurantID)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -55,7 +55,7 @@ func (c MenuController) AddMenu(ctx *gin.Context) {
 
 func (c MenuController) SetMenu(ctx *gin.Context) {
 	var json model.MenuView
-	if err := ctx.BindJSON(&json); err != nil {
+	if err := ctx.ShouldBindJSON(&json); err == nil {
 		if err := c.Repository.SetMenu(json); err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
