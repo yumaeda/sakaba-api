@@ -183,7 +183,7 @@ func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
 func (c RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) (string, error) {
 	id := uuid.New().String()
 	restaurant := model.Restaurant{
-		ID:              infrastructure.UUIDToBin(id),
+		ID:              infrastructure.UUIDToBinForTiDB(id),
 		URL:             URL,
 		Name:            name,
 		Genre:           genre,

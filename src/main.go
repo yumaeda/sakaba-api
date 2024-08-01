@@ -64,7 +64,7 @@ func main() {
 	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: tidb}}
 	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: tidb}}
 	healtchCheckController := controller.HealthCheckController{}
-	menuController := controller.MenuController{Repository: repository.MenuRepository{DB: db}}
+	menuController := controller.MenuController{Repository: repository.MenuRepository{DB: db, TiDB: tidb}}
 	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: tidb}}
 	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: tidb}}
 	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: tidb}}
@@ -85,6 +85,7 @@ func main() {
 	router.GET("/photos/:id", photoController.GetPhotosByRestaurantID)
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
 	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
+	router.GET("/menus2/:id", menuController.GetMenusByRestaurantIDFromTiDB)
 	router.GET("/restaurants/", restaurantController.GetRestaurants)
 	router.GET("/restaurants/areas/:id", restaurantController.GetRestaurantsByArea)
 	router.GET("/restaurants/dishes/:id", restaurantController.GetRestaurantsByDishID)
@@ -104,6 +105,9 @@ func main() {
 		auth.POST("/restaurant-drink/", restaurantDrinkController.AddRestaurantDrink)
 		auth.POST("/restaurant-genre/", restaurantGenreController.AddRestaurantGenre)
 		auth.POST("/restaurant/", restaurantController.AddRestaurant)
+		auth.PUT("/menu/", menuController.SetMenu)
+		auth.POST("/menu/", menuController.AddMenu)
+		auth.DELETE("/menu/:id", menuController.DeleteMenu)
 	}
 
 	router.Run(":8080")
