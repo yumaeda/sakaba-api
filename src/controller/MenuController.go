@@ -54,9 +54,9 @@ func (c MenuController) AddMenu(ctx *gin.Context) {
 }
 
 func (c MenuController) SetMenu(ctx *gin.Context) {
-	var json model.MenuView
+	var json model.MenuUpdate
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		if err := c.Repository.SetMenu(json); err == nil {
+		if err := c.Repository.SetMenu(json.ID, json.Column, json.Value); err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
 			})

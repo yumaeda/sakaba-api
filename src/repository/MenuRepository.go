@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 	"github.com/yumaeda/sakaba-api/src/infrastructure"
 	"github.com/yumaeda/sakaba-api/src/model"
@@ -11,6 +13,17 @@ import (
 type MenuRepository struct {
 	DB   *gorm.DB
 	TiDB *gorm.DB
+}
+
+// contains checks if the specified string is included in the specified array.
+func contains(array []string, str string) bool {
+	for _, item := range array {
+		if item == str {
+			return true
+		}
+	}
+
+	return false
 }
 
 // GetMenus returns the menus for the specified restaurants.
@@ -68,12 +81,16 @@ func (c MenuRepository) AddMenu(restaurantID string) (string, error) {
 	return id, dbError
 }
 
-// SetMenu sets meta data for the specified menu.
-func (c MenuRepository) SetMenu(menu model.MenuView) error {
-	dbError := c.TiDB.First(&menu, "id = ?", infrastructure.UUIDToBinForTiDB(menu.ID)).Error
-	if dbError == nil {
-		dbError = c.TiDB.Model(&menu).Updates(menu).Error
+// SetMenu updates the specified column with specified value for the specified menu.
+func (c MenuRepository) SetMenu(ID string, column string, value string) error {
+	var COLUMNS = []string{"name", "name_jpn", "price", "category", "sub_category", "region", "sort_order", "is_min_price", "is_hidden"}
+	if !contains(COLUMNS, column) {
+		return errors.New("invalid column name")
 	}
+
+	dbError := c.TiDB.Exec(`UPDATE menus
+                               SET ` + column + ` = '` + value + `'
+                             WHERE BIN_TO_UUID(id, 1) = '` + ID + `'`).Error
 
 	return dbError
 }

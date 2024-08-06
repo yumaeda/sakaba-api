@@ -22,3 +22,9 @@ type MenuNew struct {
 	NameJpn      string `json:"name_jpn"`
 	Price        int    `json:"price"`
 }
+
+type MenuUpdate struct {
+	ID     string `json:"id"`
+	Column string `json:"column"`
+	Value  string `json:"value"`
+}
