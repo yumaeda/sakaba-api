@@ -21,7 +21,7 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:  []string{"https://sakabas.com", "https://admin.tokyo-dinner.com", "http://www.baroceans.com"},
-		AllowMethods:  []string{"GET", "POST"},
+		AllowMethods:  []string{"GET", "POST", "PUT", "DELETE", "OPTION"},
 		AllowHeaders:  []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders: []string{"Content-Length"},
 		MaxAge:        12 * time.Hour,
