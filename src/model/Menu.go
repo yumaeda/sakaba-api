@@ -14,8 +14,8 @@ type MenuView struct {
 	IsHidden    int    `json:"is_hidden"`
 }
 
-// MenuNew is an entity for Menu API.
-type MenuNew struct {
+// Menu is an entity for Menu API.
+type Menu struct {
 	ID           string `json:"id"`
 	RestaurantID string `json:"restaurant_id"`
 	Name         string `json:"name"`

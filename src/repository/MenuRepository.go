@@ -69,7 +69,7 @@ func (c MenuRepository) GetMenusFromTiDB(restaurantID string) []model.MenuView {
 // AddMenu adds meta data for the new menu.
 func (c MenuRepository) AddMenu(restaurantID string) (string, error) {
 	id := uuid.New().String()
-	menu := model.MenuNew{
+	menu := model.Menu{
 		ID:           infrastructure.UUIDToBinForTiDB(id),
 		RestaurantID: infrastructure.UUIDToBinForTiDB(restaurantID),
 		Name:         "",
@@ -97,7 +97,7 @@ func (c MenuRepository) SetMenu(ID string, column string, value string) error {
 
 // DeleteMenu deletes meta data from the menus table.
 func (c MenuRepository) DeleteMenu(id string) error {
-	dbError := c.TiDB.Delete(&model.MenuNew{}, "id = ?", infrastructure.UUIDToBinForTiDB(id)).Error
+	dbError := c.TiDB.Delete(&model.Menu{}, "id = ?", infrastructure.UUIDToBinForTiDB(id)).Error
 
 	return dbError
 }
