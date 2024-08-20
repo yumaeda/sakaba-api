@@ -16,8 +16,8 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 	return jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       realm,
 		Key:         []byte(secretKey),
-		Timeout:     time.Hour,
-		MaxRefresh:  time.Hour,
+		Timeout:     3 * time.Hour,
+		MaxRefresh:  24 * time.Hour,
 		IdentityKey: identityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*model.User); ok {
