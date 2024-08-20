@@ -79,7 +79,6 @@ func main() {
 	router.GET("/photos/:id", photoController.GetPhotosByRestaurantID)
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
 	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
-	router.GET("/menus2/:id", menuController.GetMenusByRestaurantID)
 	router.GET("/restaurants/", restaurantController.GetRestaurants)
 	router.GET("/restaurants/areas/:id", restaurantController.GetRestaurantsByArea)
 	router.GET("/restaurants/dishes/:id", restaurantController.GetRestaurantsByDishID)
@@ -101,7 +100,7 @@ func main() {
 		auth.POST("/restaurant/", restaurantController.AddRestaurant)
 		auth.PUT("/menu/", menuController.SetMenu)
 		auth.POST("/menu/", menuController.AddMenu)
-		auth.DELETE("/menu/:id", menuController.DeleteMenu)
+		auth.DELETE("/menu/", menuController.DeleteMenu)
 	}
 
 	router.Run(":8080")

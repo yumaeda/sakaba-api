@@ -73,8 +73,9 @@ func (c MenuRepository) SetMenu(ID string, column string, value string) error {
 }
 
 // DeleteMenu deletes meta data from the menus table.
-func (c MenuRepository) DeleteMenu(id string) error {
-	dbError := c.DB.Delete(&model.Menu{}, "id = ?", infrastructure.UUIDToBin(id)).Error
+func (c MenuRepository) DeleteMenu(ID string) error {
+	dbError := c.DB.Exec(`DELETE FROM menus
+                           WHERE BIN_TO_UUID(id, 1) = '` + ID + `'`).Error
 
 	return dbError
 }

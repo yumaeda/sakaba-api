@@ -62,11 +62,14 @@ func (c MenuController) SetMenu(ctx *gin.Context) {
 
 // DeleteMenu deletes the specified menu.
 func (c MenuController) DeleteMenu(ctx *gin.Context) {
-	if err := c.Repository.DeleteMenu(ctx.Param("id")); err == nil {
-		ctx.JSON(http.StatusOK, gin.H{
-			"statusCode": 200,
-		})
-		return
+	var json model.MenuUpdate
+	if err := ctx.ShouldBindJSON(&json); err == nil {
+		if err := c.Repository.DeleteMenu(json.ID); err == nil {
+			ctx.JSON(http.StatusOK, gin.H{
+				"statusCode": 200,
+			})
+			return
+		}
 	}
 
 	ctx.JSON(http.StatusBadRequest, gin.H{
