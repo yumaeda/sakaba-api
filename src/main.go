@@ -45,32 +45,26 @@ func main() {
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
 
-	db, closer, err := infrastructure.ConnectToDB()
-	if err != nil {
-		panic(err.Error())
+	db, dbCloser, dbErr := infrastructure.ConnectToDB()
+	if dbErr != nil {
+		panic(dbErr.Error())
 	}
-	defer closer()
-
-	tidb, tidbCloser, tidbErr := infrastructure.ConnectToTiDB()
-	if tidbErr != nil {
-		panic(tidbErr.Error())
-	}
-	defer tidbCloser()
+	defer dbCloser()
 
 	adminController := controller.AdminController{}
-	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: tidb}}
-	categoryController := controller.CategoryController{Repository: repository.CategoryRepository{DB: tidb}}
-	dishController := controller.DishController{Repository: repository.DishRepository{DB: tidb}}
-	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: tidb}}
-	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: tidb}}
+	areaController := controller.AreaController{Repository: repository.AreaRepository{DB: db}}
+	categoryController := controller.CategoryController{Repository: repository.CategoryRepository{DB: db}}
+	dishController := controller.DishController{Repository: repository.DishRepository{DB: db}}
+	drinkController := controller.DrinkController{Repository: repository.DrinkRepository{DB: db}}
+	genreController := controller.GenreController{Repository: repository.GenreRepository{DB: db}}
 	healtchCheckController := controller.HealthCheckController{}
-	menuController := controller.MenuController{Repository: repository.MenuRepository{DB: db, TiDB: tidb}}
-	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: tidb}}
-	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: tidb}}
-	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: tidb}}
-	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{TiDB: tidb}}
-	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{DB: tidb}}
-	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: tidb}}
+	menuController := controller.MenuController{Repository: repository.MenuRepository{DB: db}}
+	photoController := controller.PhotoController{Repository: repository.PhotoRepository{DB: db}}
+	videoController := controller.VideoController{Repository: repository.VideoRepository{DB: db}}
+	rankingController := controller.RankingController{Repository: repository.RankingRepository{DB: db}}
+	restaurantController := controller.RestaurantController{Repository: repository.RestaurantRepository{TiDB: db}}
+	restaurantDrinkController := controller.RestaurantDrinkController{Repository: repository.RestaurantDrinkRepository{DB: db}}
+	restaurantGenreController := controller.RestaurantGenreController{Repository: repository.RestaurantGenreRepository{DB: db}}
 
 	router.GET("/", healtchCheckController.GetStatus)
 	router.GET("/areas/", areaController.GetAllAreas)
@@ -85,7 +79,7 @@ func main() {
 	router.GET("/photos/:id", photoController.GetPhotosByRestaurantID)
 	router.GET("/latest-photos/", photoController.GetLatestPhotos)
 	router.GET("/menus/:id", menuController.GetMenusByRestaurantID)
-	router.GET("/menus2/:id", menuController.GetMenusByRestaurantIDFromTiDB)
+	router.GET("/menus2/:id", menuController.GetMenusByRestaurantID)
 	router.GET("/restaurants/", restaurantController.GetRestaurants)
 	router.GET("/restaurants/areas/:id", restaurantController.GetRestaurantsByArea)
 	router.GET("/restaurants/dishes/:id", restaurantController.GetRestaurantsByDishID)

@@ -43,7 +43,7 @@ func (c PhotoRepository) GetLatestPhotos() []model.PhotoView {
 // AddPhoto adds meta data for the new photo.
 func (c PhotoRepository) AddPhoto(restaurantID string, fileName string) error {
 	photo := model.Photo{
-		RestaurantID: infrastructure.UUIDToBinForTiDB(restaurantID),
+		RestaurantID: infrastructure.UUIDToBin(restaurantID),
 		Type:         "dish",
 		Name:         fileName,
 	}

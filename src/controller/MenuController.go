@@ -23,25 +23,15 @@ func (c MenuController) GetMenusByRestaurantID(ctx *gin.Context) {
 	})
 }
 
-// GetMenuByRestaurantIDFromTiDB returns menus for the specified restaurant.
-func (c MenuController) GetMenusByRestaurantIDFromTiDB(ctx *gin.Context) {
-	menus := c.Repository.GetMenusFromTiDB(ctx.Param("id"))
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"body":       menus,
-	})
-}
-
 // AddMenu adds a new menu.
 func (c MenuController) AddMenu(ctx *gin.Context) {
 	var json model.Menu
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		id, dbError := c.Repository.AddMenu(json.RestaurantID)
+		dbError := c.Repository.AddMenu(json.ID, json.RestaurantID, json.Name, json.NameJpn, json.Price)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,
-				"id":         id,
+				"id":         json.ID,
 			})
 			return
 		}

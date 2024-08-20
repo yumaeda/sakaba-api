@@ -14,7 +14,7 @@ type RestaurantGenreRepository struct {
 // AddRestaurantGenre adds a new genre for the specified restaurant.
 func (c RestaurantGenreRepository) AddRestaurantGenre(restaurantID string, genreID string) error {
 	restaurantGenre := model.RestaurantGenre{
-		RestaurantID: infrastructure.UUIDToBinForTiDB(restaurantID),
+		RestaurantID: infrastructure.UUIDToBin(restaurantID),
 		GenreID:      genreID,
 	}
 	dbError := c.DB.Create(&restaurantGenre).Error
