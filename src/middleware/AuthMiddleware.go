@@ -47,15 +47,15 @@ func (c *AuthMiddleware) Init(realm string, identityKey string, secretKey string
 			if adminUser.Email == email && adminUser.Password == password {
 				return &model.User{
 					UserName:  email,
-					LastName:  "Maeda",
-					FirstName: "Yukitaka",
+					LastName:  "Admin",
+					FirstName: "Sakabas",
 				}, nil
 			}
 
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			if v, ok := data.(*model.User); ok && v.UserName == "yumaeda@gmail.com" {
+			if v, ok := data.(*model.User); ok && v.LastName == "Admin" && v.FirstName == "Sakabas" {
 				return true
 			}
 
