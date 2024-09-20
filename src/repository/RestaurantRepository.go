@@ -58,7 +58,7 @@ func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string,
                  WHERE r.is_closed = 0
 		           AND r.area = '` + area + `'
                  GROUP BY r.id
-                 ORDER BY photo_count DESC`).Scan(&restaurants)
+                 ORDER BY distance ASC`).Scan(&restaurants)
 
 	return restaurants
 }
@@ -91,7 +91,7 @@ func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string, latitude s
                  WHERE r.is_closed = 0
                    AND rg.genre_id = ` + genreID + `
                  GROUP BY r.id
-                 ORDER BY photo_count DESC`).Scan(&restaurants)
+                 ORDER BY distance ASC`).Scan(&restaurants)
 
 	return restaurants
 }
@@ -123,7 +123,7 @@ func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string, latitude s
                     ON r.id = p.restaurant_id
 		   AND rd.drink_id = ` + drinkID + `
                  GROUP BY r.id
-                 ORDER BY photo_count DESC`).Scan(&restaurants)
+                 ORDER BY distance ASC`).Scan(&restaurants)
 
 	return restaurants
 }
@@ -158,7 +158,7 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude str
                  WHERE r.is_closed = 0
                    AND d.id = ` + dishID + `
                  GROUP BY r.id
-                 ORDER BY photo_count DESC`).Scan(&restaurants)
+                 ORDER BY distance ASC`).Scan(&restaurants)
 
 	return restaurants
 }
