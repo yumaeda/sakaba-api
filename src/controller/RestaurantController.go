@@ -25,7 +25,7 @@ func (c RestaurantController) GetRestaurants(ctx *gin.Context) {
 func (c RestaurantController) GetRestaurantsByArea(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetRestaurantsByArea(ctx.Param("id")),
+		"body":       c.Repository.GetRestaurantsByArea(ctx.Param("id"), ctx.Param("latitude"), ctx.Param("longitude")),
 	})
 }
 
@@ -33,7 +33,7 @@ func (c RestaurantController) GetRestaurantsByArea(ctx *gin.Context) {
 func (c RestaurantController) GetRestaurantsByGenreID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetRestaurantsByGenreID(ctx.Param("id")),
+		"body":       c.Repository.GetRestaurantsByGenreID(ctx.Param("id"), ctx.Param("latitude"), ctx.Param("longitude")),
 	})
 }
 
@@ -41,7 +41,7 @@ func (c RestaurantController) GetRestaurantsByGenreID(ctx *gin.Context) {
 func (c RestaurantController) GetRestaurantsByDrinkID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetRestaurantsByDrinkID(ctx.Param("id")),
+		"body":       c.Repository.GetRestaurantsByDrinkID(ctx.Param("id"), ctx.Param("latitude"), ctx.Param("longitude")),
 	})
 }
 
@@ -49,7 +49,7 @@ func (c RestaurantController) GetRestaurantsByDrinkID(ctx *gin.Context) {
 func (c RestaurantController) GetRestaurantsByDishID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetRestaurantsByDishID(ctx.Param("id")),
+		"body":       c.Repository.GetRestaurantsByDishID(ctx.Param("id"), ctx.Param("latitude"), ctx.Param("longitude")),
 	})
 }
 

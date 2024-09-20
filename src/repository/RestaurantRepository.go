@@ -33,7 +33,7 @@ func (c RestaurantRepository) GetRestaurants() []model.Restaurant {
 }
 
 // GetRestaurantsByArea returns restaurants for the specified area.
-func (c RestaurantRepository) GetRestaurantsByArea(area string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByArea(area string, latitude string, longitude string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
 	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
@@ -43,7 +43,8 @@ func (c RestaurantRepository) GetRestaurantsByArea(area string) []model.SimpleRe
 	               r.business_day_info,
 	               r.address,
 	               r.latitude,
-	               r.longitude,
+	               r.longitude,` +
+		infrastructure.GetDistanceSQL("r.latitude", "r.longitude", latitude, longitude) + ` AS distance,
 	               r.area,
 	               COUNT(p.restaurant_id) AS photo_count,
                    (
@@ -63,7 +64,7 @@ func (c RestaurantRepository) GetRestaurantsByArea(area string) []model.SimpleRe
 }
 
 // GetRestaurantsByGenreID returns the open restaurants for the specified genre.
-func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string, latitude string, longitude string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
 	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
@@ -73,7 +74,8 @@ func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string) []model.Si
 	               r.business_day_info,
 	               r.address,
 	               r.latitude,
-	               r.longitude,
+	               r.longitude,` +
+		infrastructure.GetDistanceSQL("r.latitude", "r.longitude", latitude, longitude) + ` AS distance,
 	               r.area,
 	               COUNT(p.restaurant_id) AS photo_count,
                    (
@@ -95,7 +97,7 @@ func (c RestaurantRepository) GetRestaurantsByGenreID(genreID string) []model.Si
 }
 
 // GetRestaurantsByDrinkID returns the open restaurants for the specified drink.
-func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string, latitude string, longitude string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
 	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
@@ -105,7 +107,8 @@ func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string) []model.Si
 	               r.business_day_info,
 	               r.address,
 	               r.latitude,
-	               r.longitude,
+	               r.longitude,` +
+		infrastructure.GetDistanceSQL("r.latitude", "r.longitude", latitude, longitude) + ` AS distance,
 	               r.area,
 	               COUNT(p.restaurant_id) AS photo_count,
                    (
@@ -126,7 +129,7 @@ func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string) []model.Si
 }
 
 // GetRestaurantsByDishID returns the open restaurants which have the specified dish.
-func (c RestaurantRepository) GetRestaurantsByDishID(dishID string) []model.SimpleRestaurant {
+func (c RestaurantRepository) GetRestaurantsByDishID(dishID string, latitude string, longitude string) []model.SimpleRestaurant {
 	restaurants := []model.SimpleRestaurant{}
 	c.TiDB.Raw(`SELECT BIN_TO_UUID(r.id, 1) AS id,
 	               r.url,
@@ -136,7 +139,8 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string) []model.Simp
 	               r.business_day_info,
 	               r.address,
 	               r.latitude,
-	               r.longitude,
+	               r.longitude,` +
+		infrastructure.GetDistanceSQL("r.latitude", "r.longitude", latitude, longitude) + ` AS distance,
 	               r.area,
 	               COUNT(p.restaurant_id) AS photo_count,
                    (
