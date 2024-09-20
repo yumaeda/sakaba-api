@@ -173,7 +173,7 @@ func (c RestaurantRepository) GetOpenRestaurantCount(latitude string, longitude 
                  RIGHT JOIN restaurants AS r
                     ON a.value = r.area
                  WHERE r.is_closed = 0
-				   AND (` + infrastructure.GetDistanceSQL(latitude, longitude) + `) < 1
+				   AND (` + infrastructure.GetDistanceSQL("r.latitude", "r.longitude", latitude, longitude) + `) < 1
                  GROUP BY a.value, a.name
                  ORDER BY count DESC`).Scan(&restaurantCounts)
 

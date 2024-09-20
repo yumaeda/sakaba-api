@@ -75,31 +75,32 @@ func UUIDToBin(uuid string) string {
 }
 
 // Get SQL statement for calculating the distance between two points
-func GetDistanceSQL(latitude string, longitude string) string {
+func GetDistanceSQL(lat1 string, lon1 string, lat2 string, lon2 string) string {
 	template := `6371.009 * 2 * ATAN2(
 		SQRT(
-			SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) *
-			SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) +
-			SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
-			SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
-			COS({{latitude}} * PI() / 180) *
-			COS(restaurants.latitude * PI() / 180)
+			SIN(({{lat1}} - {{lat2}}) * PI() / 180 / 2) *
+			SIN(({{lat1}} - {{lat2}}) * PI() / 180 / 2) +
+			SIN(({{lon1}} - {{lon2}}) * PI() / 180 / 2) *
+			SIN(({{lon1}} - {{lon2}}) * PI() / 180 / 2) *
+			COS({{lat2}} * PI() / 180) *
+			COS({{lat1}} * PI() / 180)
 		),
 		SQRT(
 			1 - (
-				SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) *
-				SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) +
-				SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
-				SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
-				COS({{latitude}} * PI() / 180) *
-				COS(restaurants.latitude * PI() / 180)
+				SIN(({{lat1}} - {{lat2}}) * PI() / 180 / 2) *
+				SIN(({{lat1}} - {{lat2}}) * PI() / 180 / 2) +
+				SIN(({{lon1}} - {{lon2}}) * PI() / 180 / 2) *
+				SIN(({{lon1}} - {{lon2}}) * PI() / 180 / 2) *
+				COS({{lat2}} * PI() / 180) *
+				COS({{lat1}} * PI() / 180)
 			)
 		)
 	)`
 
-	return strings.ReplaceAll(
-		strings.ReplaceAll(template, "{{latitude}}", latitude),
-		"{{longitude}}",
-		longitude,
-	)
+	result := strings.ReplaceAll(template, "{{lat1}}", lat1)
+	result = strings.ReplaceAll(result, "{{lon1}}", lon1)
+	result = strings.ReplaceAll(result, "{{lat2}}", lat2)
+	result = strings.ReplaceAll(result, "{{lon2}}", lon2)
+
+	return result
 }
