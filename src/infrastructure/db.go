@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -71,4 +72,34 @@ func UUIDToBin(uuid string) string {
 	}
 
 	return bin
+}
+
+// Get SQL statement for calculating the distance between two points
+func GetDistanceSQL(latitude string, longitude string) string {
+	template := `6371.009 * 2 * ATAN2(
+		SQRT(
+			SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) *
+			SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) +
+			SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
+			SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
+			COS({{latitude}} * PI() / 180) *
+			COS(restaurants.latitude * PI() / 180)
+		),
+		SQRT(
+			1 - (
+				SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) *
+				SIN((restaurants.latitude - {{latitude}}) * PI() / 180 / 2) +
+				SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
+				SIN((restaurants.longitude - {{longitude}}) * PI() / 180 / 2) *
+				COS({{latitude}} * PI() / 180) *
+				COS(restaurants.latitude * PI() / 180)
+			)
+		)
+	)`
+
+	return strings.ReplaceAll(
+		strings.ReplaceAll(template, "{{latitude}}", latitude),
+		"{{longitude}}",
+		longitude,
+	)
 }

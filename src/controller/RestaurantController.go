@@ -57,7 +57,7 @@ func (c RestaurantController) GetRestaurantsByDishID(ctx *gin.Context) {
 func (c RestaurantController) GetOpenRestaurantCount(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"statusCode": 200,
-		"body":       c.Repository.GetOpenRestaurantCount(),
+		"body":       c.Repository.GetOpenRestaurantCount(ctx.Param("latitude"), ctx.Param("longitude")),
 	})
 }
 

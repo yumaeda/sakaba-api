@@ -160,7 +160,7 @@ func (c RestaurantRepository) GetRestaurantsByDishID(dishID string) []model.Simp
 }
 
 // GetOpenRestaurantCount returns the number of open restaurants within 3km.
-func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
+func (c RestaurantRepository) GetOpenRestaurantCount(latitude string, longitude string) []model.RestaurantCount {
 	restaurantCounts := []model.RestaurantCount{}
 	c.TiDB.Raw(`SELECT a.value AS area,
 	                   a.name AS name,
@@ -173,6 +173,7 @@ func (c RestaurantRepository) GetOpenRestaurantCount() []model.RestaurantCount {
                  RIGHT JOIN restaurants AS r
                     ON a.value = r.area
                  WHERE r.is_closed = 0
+				   AND (` + infrastructure.GetDistanceSQL(latitude, longitude) + `) < 1
                  GROUP BY a.value, a.name
                  ORDER BY count DESC`).Scan(&restaurantCounts)
 
