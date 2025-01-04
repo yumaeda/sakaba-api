@@ -117,11 +117,12 @@ func (c RestaurantRepository) GetRestaurantsByDrinkID(drinkID string, latitude s
 					   REPLACE(JSON_EXTRACT(r.business_day_info, CONCAT('$."', DAYOFWEEK(CURDATE()), '".End')), '"', '') >= DATE_FORMAT(CONVERT_TZ(NOW(), '+00:00', '+09:00'), '%H%i')
 				   ) AS is_open
                   FROM restaurants AS r
-                  JOIN restaurant_drinks AS rd
-                    ON r.id = rd.restaurant_id
+                  JOIN restaurant_drinks AS d
+                    ON r.id = d.restaurant_id
                   LEFT JOIN photos AS p
                     ON r.id = p.restaurant_id
-		   AND rd.drink_id = ` + drinkID + `
+                 WHERE r.is_closed = 0
+                   AND d.drink_id = ` + drinkID + `
                  GROUP BY r.id
                  ORDER BY distance ASC`).Scan(&restaurants)
 
