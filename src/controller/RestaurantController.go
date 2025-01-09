@@ -65,7 +65,7 @@ func (c RestaurantController) GetOpenRestaurantCount(ctx *gin.Context) {
 func (c RestaurantController) AddRestaurant(ctx *gin.Context) {
 	var json model.Restaurant
 	if err := ctx.ShouldBindJSON(&json); err == nil {
-		id, dbError := c.Repository.AddRestaurant(json.URL, json.Name, json.Genre, json.Tel, json.BusinessDayInfo, json.Address, json.Latitude, json.Longitude, json.Area)
+		id, dbError := c.Repository.AddRestaurant(json.URL, json.Name, json.Tel, json.BusinessDayInfo, json.Address, json.Latitude, json.Longitude, json.Area)
 		if dbError == nil {
 			ctx.JSON(http.StatusOK, gin.H{
 				"statusCode": 200,

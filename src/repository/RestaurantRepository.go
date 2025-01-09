@@ -186,13 +186,13 @@ func (c RestaurantRepository) GetOpenRestaurantCount(latitude string, longitude 
 }
 
 // AddRestaurant adds a new restaurant.
-func (c RestaurantRepository) AddRestaurant(URL string, name string, genre string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) (string, error) {
+func (c RestaurantRepository) AddRestaurant(URL string, name string, tel string, businessDayInfo string, address string, latitude string, longitude string, area string) (string, error) {
 	id := uuid.New().String()
 	restaurant := model.Restaurant{
 		ID:              infrastructure.UUIDToBin(id),
 		URL:             URL,
 		Name:            name,
-		Genre:           genre,
+		Genre:           "",
 		Tel:             tel,
 		BusinessDayInfo: businessDayInfo,
 		Address:         address,
